@@ -1,4 +1,5 @@
-"""
+""" Extract clear key segments from specified songs in Micchi, et al.'s
+Meta-Corpus using the key and chord predictions from the Frog model.
 """
 
 from argparse import ArgumentParser
@@ -19,7 +20,8 @@ from utils import load_filepaths_from_txt_file, load_mxl_file_w_m21, load_rntxt_
                   strip_songname_from_path
 
 class MicchiPredictionsKeySegmentAnnotatorAndExporter:
-    """
+    """ Extract clear key segments from specified songs in Micchi, et al.'s
+    Meta-Corpus using the key and chord predictions from the Frog model.
     """
 
     def __init__(self, txt_file_with_mxl_filepaths, predicted_rntxt_filepaths_dir,
@@ -60,7 +62,12 @@ class MicchiPredictionsKeySegmentAnnotatorAndExporter:
                                                                       allow_root_position_viio_chords=allow_root_position_viio_chords)
 
     def convert_mxl_filepaths_to_rntxt_filepaths(self, mxl_filepaths, predicted_rntxt_filepaths_dir):
-        """
+        """ Get path to RomanText file for each song.
+
+        Parameters
+        ----------
+        mxl_filepaths : list of str
+        predicted_rntxt_filepaths_dir : str 
         """
         rntxt_filepaths = []
         for mxl_filepath in mxl_filepaths:
@@ -71,11 +78,7 @@ class MicchiPredictionsKeySegmentAnnotatorAndExporter:
         return rntxt_filepaths
 
     def annotate_and_export_key_segments_for_all_songs(self):
-        """
-
-        Parameters
-        ----------
-        min_key_segment_quarter_length : int
+        """ Extract and export key segments for all specified songs.
         """
         for mxl_filepath, rntxt_filepath in zip(self.mxl_filepaths, self.rntxt_filepaths):
             print("mxl file:", mxl_filepath.split('/')[-1], "rntxt file:", rntxt_filepath.split('/')[-1])
@@ -95,7 +98,7 @@ class MicchiPredictionsKeySegmentAnnotatorAndExporter:
             self.key_segment_indices_writer.write_songs_to_key_segment_indices_dict_to_npz_file()
 
     def annotate_and_export_key_segments_for_song(self, mxl_filepath, parsed_mxl, rntxt_analysis):
-        """
+        """ Extract and export predicted key segments for a single song.
 
         Parameters
         ----------
@@ -121,14 +124,16 @@ class MicchiPredictionsKeySegmentAnnotatorAndExporter:
             self.key_segment_indices_writer.get_key_segment_indices_for_song(key_segments, mxl_filepath)
 
 def get_commandline_args():
+    """ Get commandline arguments from user.
     """
-    Returns
-    -------
-    commandline_args : argparse.Namespace
-    """
-    parser = ArgumentParser(description='')
-    parser.add_argument('--txt_file_with_mxl_filepaths', type=str)
-    parser.add_argument('--predicted_rntxt_filepaths_dir', type=str)
+    parser = ArgumentParser(description='Extract clear key segments from specified songs in Micchi, et al.\'s '
+                                        'Meta-Corpus using the key and chord predictions from the Frog model.')
+    parser.add_argument('--txt_file_with_mxl_filepaths', type=str,
+                        help='Text file containing paths to MusicXML files to '
+                             'extract key segments from.')
+    parser.add_argument('--predicted_rntxt_filepaths_dir', type=str,
+                        help='Path to RomanText files corresponding to songs '
+                             'specified in `--txt_file_with_mxl_filepaths`.')
     parser.add_argument('--key_segment_annotator_class', type=str,
                         choices=['BasicKeySegmentAnnotator',
                                  'RelaxedKeySegmentAnnotator',
@@ -138,16 +143,38 @@ def get_commandline_args():
                                  'NeapolitanChordsKeySegmentAnnotator',
                                  'ChromaticKeySegmentAnnotator',
                                  'TonicizationKeySegmentAnnotator'],
-                        default='BasicKeySegmentAnnotator')
+                        default='BasicKeySegmentAnnotator',
+                        help='Clear Key Segment Definition to use when extracting key '
+                             'segments.\n'
+                             'Class names mapped to Clear Key Segment Definitions in '
+                             'thesis:\n'
+                             'Definition 1 = `BasicKeySegmentAnnotator`\n'
+                             'Definition 2 = `StrictKeySegmentAnnotator`\n'
+                             'Definition 3 = `RelaxedKeySegmentAnnotator`\n'
+                             'Definition 4 = `ChromaticKeySegmentAnnotator`\n'
+                             'Definition 5 = `MixtureKeySegmentAnnotator`\n'
+                             'Definition 6 = `NeapolitanKeySegmentAnnotator`\n'
+                             'Definition 7 = `Augmented6thKeySegmentAnnotator`\n'
+                             'Definition 8 = `TonicizationKeySegmentAnnotator`')
     parser.add_argument('--allow_root_position_viio_chords', action='store_true',
-                        help='Only relevant when `--key_segment_annotator_class` '
+                        help='Allows VII chords in root position to be '
+                             'counted as part of dominant harmony. Only '
+                             'relevant when `--key_segment_annotator_class` '
                              'option is set to `RelaxedKeySegmentAnnotator`.')
-    parser.add_argument('--min_key_segment_quarter_length', type=int)
+    parser.add_argument('--min_key_segment_quarter_length', type=int,
+                        help='The minimum length an extracted key segment should be in '
+                             'quarter note duration. Key segments with a shorter '
+                             'duration than `min_key_segment_quarter_length` are '
+                             'thrown out.')
 
     parser.add_argument('--key_segments_output_method', type=str,
                         choices=['export_key_segments',
                                  'output_events_to_exclude',
-                                 'output_key_segment_indices'])
+                                 'output_key_segment_indices'],
+                        help='`export_key_segments` - '
+                             '`output_events_to_exclude` - '
+                             '`output_key_segment_indices` - Output the eighth note '
+                             'beat index start and stop time of each key segment.')
 
     parser.add_argument('--ground_truth_key_labels_npz_path', type=str,
                         help='Only relevant when `output_events_to_exclude` '

@@ -5,11 +5,14 @@ from basic_key_segment_annotator import BasicKeySegmentAnnotator
 from key_segment import KeySegment
 
 class TonicizationKeySegmentAnnotator(BasicKeySegmentAnnotator):
-    """
+    """ Implementation of Clear Key Segment Definition 8 from thesis,
+    which defines a key segment as follows: "a maximal segment of music
+    that does not contain tonicization events."
     """
 
     def get_key_segments(self):
-        """
+        """ Get all key segments from current song that satisfy the criteria for
+        Definition 8.
         """
         key_segments = []
         current_key_segment = None

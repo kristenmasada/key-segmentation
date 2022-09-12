@@ -1,4 +1,9 @@
-"""
+""" Detects where significant foreign notes occur in the
+score by identifying segments labeled with chords that
+contain foreign notes. Also used to break up existing
+key segments based on where these foreign note chords
+occur. Takes into account whether mixture, augmented 6th
+chords, and/or Neapolitan chords are allowed. 
 """
 
 import re
@@ -6,12 +11,23 @@ import re
 from key_segment import KeySegment
 
 class ForeignNoteDetector:
-    """
+    """ Detects where significant foreign notes occur in the
+    score by identifying segments labeled with chords that
+    contain foreign notes. Also used to break up existing
+    key segments based on where these foreign note chords
+    occur. Takes into account whether mixture, augmented 6th
+    chords, and/or Neapolitan chords are allowed. 
     """
 
     def __init__(self, allow_for_mixture=False, allow_aug6_chords=False,
                  allow_neapolitan_chords=False):
         """
+
+        Parameters
+        ----------
+        allow_for_mixture : bool
+        allow_aug6_chords : bool
+        allow_neapolitan_chords : bool
         """
         self.allow_for_mixture = allow_for_mixture
         self.allow_aug6_chords = allow_aug6_chords
@@ -25,18 +41,26 @@ class ForeignNoteDetector:
         self.neapolitan_chords_regex = "(n6|N6|(b|-)II(9|7|65|64|6|42)?)"
 
     def find_foreign_notes_and_split_key_segments_accordingly(self, key_segments):
-        """
+        """ Detect significant foreign notes* and break up the existing key segments into
+        smaller key segments that do not contain these foreign note chords.
+
+        *For the time being, this is equivalent to detecting foreign note chords.
 
         Parameters
         ----------
-        key_segments : list of 
+        key_segments : list of KeySegment 
         """
         key_segments = self.find_foreign_note_chords_and_split_key_segments_accordingly(key_segments)
 
         return key_segments
 
     def find_foreign_note_chords_and_split_key_segments_accordingly(self, key_segments):
-        """
+        """ Detect foreign note chords and break up the existing key segments into
+        smaller key segments that do not contain these foreign note chords.
+
+        Parameters
+        ----------
+        key_segments : list of KeySegment 
         """
         split_key_segments = []
         for key_segment in key_segments:
@@ -48,17 +72,23 @@ class ForeignNoteDetector:
         return split_key_segments
 
     def find_non_foreign_note_chords_key_segment_ranges(self, key_segment):
-        """
+        """ Detect foreign note chords and break up the key segments
+        into smaller key segments based on where these foreign note
+        chords occur. 
 
         Parameters
         ----------
-        key_segment :
+        key_segment : KeySegment
 
         Returns
         -------
         non_foreign_note_chords_key_segment_ranges : list of (int, int)
             (start_rntxt_chord_idx, end_rntxt_chord_idx). Note that
             `end_rntxt_chord_idx` is exclusive.
+            `start_rntxt_chord_idx` indicates the index of the RomanText
+            chord each key segment begins with and `end_rntxt_chord_idx`
+            is the index of the first RomanText chord that occurs
+            immediately after the key segment.
 
         Notes
         -----
@@ -77,8 +107,6 @@ class ForeignNoteDetector:
             25.0: <music21.roman.RomanNumeral iv7/iv in e minor>
             27.0: <music21.roman.RomanNumeral IV6 in e minor>
             28.0: <music21.roman.RomanNumeral iv7/iv in e minor>
-
-        *What if first or last chord is a foreign note chord?
         """
         non_foreign_note_chords_key_segment_ranges = []
         key_segment_start_idx = None
@@ -98,11 +126,13 @@ class ForeignNoteDetector:
         return non_foreign_note_chords_key_segment_ranges
 
     def check_if_rntxt_chord_is_foreign_note_chord(self, rntxt_chord):
-        """
+        """ Check if the current RomanText chord contains a significant
+        foreign note. Take into account whether Neapolitan chords,
+        augmented 6th chords, and/or mixture are allowed.
 
         Parameters
         ----------
-        rntxt_chord : 
+        rntxt_chord : music21.roman.RomanNumeral
         """
         chord_label = rntxt_chord.figure
         if chord_label.lower() == "cad64":
@@ -123,7 +153,12 @@ class ForeignNoteDetector:
             raise Exception("`rntxt_chord.key` has mode other than major or minor ({})".format(rntxt_chord.key.mode))
 
     def check_if_is_neapolitan_chord(self, chord_label):
-        """
+        """ Check if the current chord label is a
+        Neapolitan chord.
+
+        Parameters
+        ----------
+        chord_label : str
         """
         neapolitan_chord_search = re.search(self.neapolitan_chords_regex, chord_label)
         if (neapolitan_chord_search
@@ -133,7 +168,12 @@ class ForeignNoteDetector:
             return False
 
     def check_if_is_non_diatonic_chord_in_major_key(self, chord_label):
-        """
+        """ Check if the current chord label is considered to be a
+        non-diatonic chord in major.
+
+        Parameters
+        ----------
+        chord_label : str
         """
         major_key_diatonic_triad_search = re.search(self.major_key_diatonic_triads_regex, chord_label)
         major_key_diatonic_seventh_chord_search = re.search(self.major_key_diatonic_seventh_chords_regex, chord_label)
@@ -147,7 +187,8 @@ class ForeignNoteDetector:
             return True 
 
     def check_if_is_non_tonicized_augmented_6th_chord(self, chord_label):
-        """
+        """ Check if the current chord label is a non-tonicized
+        augmented 6th chord.
 
         Parameters
         ----------
@@ -165,10 +206,14 @@ class ForeignNoteDetector:
             return False
 
     def check_if_is_tonicization_chord(self, chord_label):
-        """
+        """ Check if the chord label indicates a tonicization
+        (i.e. check if it contains a '/' followed by another
+        Roman Numeral chord symbol to indicate the tonicized
+        key).
+
         Parameters
         ----------
-        chord_label : 
+        chord_label : str
         """
         tonicization_chord_search = re.search("/[vi]+", chord_label.lower())
         if tonicization_chord_search:
@@ -177,7 +222,12 @@ class ForeignNoteDetector:
             return False
 
     def check_if_is_non_diatonic_chord_in_minor_key(self, chord_label):
-        """
+        """ Check if the current chord label is considered to be a
+        non-diatonic chord in minor.
+
+        Parameters
+        ----------
+        chord_label : str
         """
         minor_key_diatonic_triad_search = re.search(self.minor_key_diatonic_triads_regex, chord_label)
         minor_key_diatonic_seventh_chord_search = re.search(self.minor_key_diatonic_seventh_chords_regex, chord_label)
@@ -192,13 +242,19 @@ class ForeignNoteDetector:
 
     def split_key_segment_based_on_non_foreign_note_chord_ranges(self, key_segment, split_key_segments,  
                                                                  non_foreign_note_chords_key_segment_ranges):
-        """
+        """ Break up the current key segment into smaller key segments that don't
+        contain foreign note chords. If the current key segment contains no
+        foreign note chords, it is fine as-is.
 
         Parameters
         ----------
         key_segment : KeySegment
+            Key segment to split.
         split_key_segments : list of KeySegment
+            Working list of the new key segments that don't contain foreign note chords.
         non_foreign_note_chords_key_segment_ranges : list of (int, int)
+            (start_rntxt_chord_idx, end_rntxt_chord_idx). Note that
+            `end_rntxt_chord_idx` is exclusive.
         """
         for (start_idx, end_idx) in non_foreign_note_chords_key_segment_ranges:
             split_key_segment = KeySegment(first_rntxt_chord=key_segment.rntxt_chords[start_idx],

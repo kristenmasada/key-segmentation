@@ -1,4 +1,5 @@
-"""
+""" Get the section of the score that corresponds to each key segment.
+Can output each key segment score to a MusicXML file if desired.
 """
 
 from copy import deepcopy
@@ -8,7 +9,8 @@ from os.path import basename, dirname, isdir
 import music21 as m21
 
 class KeySegmentExporter:
-    """
+    """ Get the section of the score that corresponds to each key segment.
+    Can output each key segment score to a MusicXML file if desired.
     """
 
     def __init__(self, parsed_mxl, measure_onset_finder, mxl_filepath=None):
@@ -36,7 +38,8 @@ class KeySegmentExporter:
             self.song_name = "tmp"
 
     def get_key_segments_output_dir_name(self, mxl_filepath):
-        """
+        """ Get the name of the output directory where the
+        key segments should be stored.
 
         Parameters
         ----------
@@ -47,13 +50,14 @@ class KeySegmentExporter:
         return key_segments_output_dir 
 
     def create_key_segments_output_dir_if_dne(self):
-        """
+        """ Create `self.key_segments_output_dir` if it doesn't
+        already exist.
         """
         if not isdir(self.key_segments_output_dir):
             mkdir(self.key_segments_output_dir)
 
     def get_songname_from_mxl_path(self, mxl_path):
-        """
+        """ Get songname from MusicXML path.
 
         Parameters
         ----------
@@ -62,14 +66,22 @@ class KeySegmentExporter:
         return basename(mxl_path)[:-4]
 
     def extract_and_export_key_segments_to_mxl_files(self, key_segments):
-        """
+        """ Extract and export the sections of the score corresponding to
+        each key segment. Each key segment is placed in its own MusicXML
+        file.
+
+        Parameters
+        ----------
+        key_segments : list of KeySegment
         """
         for key_segment_idx, key_segment in enumerate(key_segments):
             parsed_mxl_key_segment = self.extract_key_segment_from_parsed_mxl(key_segment)
             self.export_key_segment_to_mxl_file(key_segment_idx, parsed_mxl_key_segment)
 
     def extract_key_segment_from_parsed_mxl(self, key_segment):
-        """
+        """ Get the section of the score that corresponds to the current
+        key segment. Remove any notes that occur before the start of the
+        key segment and after the end of the key segment.
 
         Parameters
         ----------
@@ -111,11 +123,13 @@ class KeySegmentExporter:
 
     def remove_notes_in_first_measure_before_key_segment_onset(self, key_segment_in_parsed_mxl,
                                                                first_measure_onset, key_segment_onset):
-        """
-        Notes
-        -----
-        Not the most efficient implementation. 
-        NOTE: really only need to look at the first measure.
+        """ Remove any notes that occur before the onset of the key segment.
+
+        Parameters
+        ----------
+        key_segment_in_parsed_mxl : music21.stream.Score
+        first_measure_onset : float
+        key_segment_onset : float 
         """
         #print("key_segment.onset:", key_segment_onset, "first_measure_onset:", first_measure_onset)
         for stream_element in key_segment_in_parsed_mxl.recurse():
@@ -129,7 +143,13 @@ class KeySegmentExporter:
 
     def remove_notes_in_last_measure_before_key_segment_onset(self, key_segment_in_parsed_mxl,
                                                               first_measure_onset, key_segment_offset):
-        """
+        """ Remove any notes that occur after the end of the key segment.
+
+        Parameters
+        ----------
+        key_segment_in_parsed_mxl : music21.stream.Score
+        first_measure_onset : float
+        key_segment_offset : float
         """
         for stream_element in key_segment_in_parsed_mxl.recurse():
             if (isinstance(stream_element, m21.chord.Chord)
@@ -141,17 +161,21 @@ class KeySegmentExporter:
                     stream_element.activeSite.pop(stream_element_idx)
 
     def export_key_segment_to_mxl_file(self, key_segment_idx, parsed_mxl_key_segment):
-        """
+        """ Export key segment score to MusicXML file.
 
         Parameters
         ----------
         key_segment_idx : int
-        parsed_mxl_key_segment : 
+        parsed_mxl_key_segment : music21.stream.Score
         """
         key_segment_path = self.get_key_segment_path(key_segment_idx)
         parsed_mxl_key_segment.write('musicxml', fp=key_segment_path)
 
     def get_key_segment_path(self, key_segment_idx):
-        """
+        """ Get path to key segment.
+
+        Parameters
+        ----------
+        key_segment_idx : int
         """
         return self.key_segments_output_dir + '/' + self.song_name + '_' + str(key_segment_idx) + '.mxl'

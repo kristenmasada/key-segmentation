@@ -1,12 +1,16 @@
-"""
+""" Find the number and onset time of each measure in a song.
 """
 
 class MeasureOnsetFinder:
-    """
+    """ Find the number and onset time of each measure in a song.
     """
 
     def __init__(self, parsed_mxl):
         """
+
+        Parameters
+        ----------
+        parsed_mxl : music21.stream.Score
         """
         self.parsed_mxl_starts_on_measure_zero = False
         self.measure_nums_to_measure_onsets = self.get_measure_nums_to_measure_onsets(parsed_mxl)
@@ -14,7 +18,13 @@ class MeasureOnsetFinder:
         self.last_measure_num = max(self.measure_nums_to_measure_onsets) 
 
     def get_measure_nums_to_measure_onsets(self, parsed_mxl):
-        """
+        """ From the parsed MusicXML, create a dictionary that maps the
+        number of each measure to the onset time of that measure.
+        
+        There are instances where the first measure in a song has
+        number 0 instead of 1. If this is the case, shift all of
+        the measure numbers by 1 to ensure the first measure has
+        measure number 1.
 
         Parameters
         ----------
@@ -26,13 +36,13 @@ class MeasureOnsetFinder:
 
         Notes
         -----
-        *This code is a modified version of the `AnnotationConverter._get_measure_offsets()`
-         method from frog.
-        - `measures_list[0]` because there might be more than one part (e.g. piano
-          right and left hand, other instruments, etc.).
-        - Check if `first_part_measure.numberSuffix is None` because consider only
-          measures that have not been marked as "excluded" in the musicxml (for example
-          using Musescore).
+        *This function is a modified version of the `AnnotationConverter._get_measure_offsets()`
+         method from Micchi, et al.'s frog code.
+        - On line 51, `measures_list[0]` is used because there might be more than one part
+          (e.g. piano right and left hand, other instruments, etc.).
+        - On line 52, check if `first_part_measure.numberSuffix is None` because only
+          measures that have not been marked as "excluded" in the MusicXML should be
+          considered.
         """
         measure_onset_map = parsed_mxl.measureOffsetMap()
 

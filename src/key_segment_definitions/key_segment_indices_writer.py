@@ -1,4 +1,7 @@
-"""
+""" Output the clear key segments to an Npz file in the
+format of a list of eighth note beat indices indicating
+the start and stop time of each key segment (NOTE: stop
+index is exclusive). 
 """
 
 import numpy as np
@@ -7,6 +10,11 @@ from file_handlers import NpzFileHandler
 from utils import convert_camel_case_to_snake_case, strip_songname_from_path
 
 class KeySegmentIndicesWriter:
+    """ Output the clear key segments to an Npz file in the
+    format of a list of eighth note beat indices indicating
+    the start and stop time of each key segment (NOTE: stop
+    index is exclusive).
+    """
 
     def __init__(self, key_segment_annotator_class, micchi_predictions=False,
                  allow_root_position_viio_chords=False, thresholded=False):
@@ -16,6 +24,9 @@ class KeySegmentIndicesWriter:
         ----------
         key_segment_annotator_class : str
         micchi_predictions : bool
+            If true, clear key segments were determined by the Frog model's key
+            and chord predictions. If false, ground truth key/chord labels were
+            used to create the clear key segments.
         allow_root_position_viio_chords : bool
         thresholded : bool
         """
@@ -29,9 +40,9 @@ class KeySegmentIndicesWriter:
                                                                 allow_root_position_viio_chords,
                                                                 thresholded)
 
-    def get_output_npz_filename(self, key_segment_annotator_class, micchi_predictions, allow_root_position_viio_chords,
-                                thresholded=False):
-        """
+    def get_output_npz_filename(self, key_segment_annotator_class, micchi_predictions,
+                                allow_root_position_viio_chords, thresholded=False):
+        """ Get the name of the outputted Npz file.
 
         Parameters
         ----------
@@ -60,7 +71,13 @@ class KeySegmentIndicesWriter:
         return output_npz_filename
 
     def get_key_segment_indices_for_song(self, key_segments, mxl_filepath):
-        """
+        """ For each clear key segment in a song, add the eighth note beat
+        index start time and end time of each key segment to a list.
+
+        Parameters
+        ----------
+        key_segments : list of KeySegment
+        mxl_filepath : str
         """
         songname = strip_songname_from_path(mxl_filepath)
         
@@ -74,12 +91,16 @@ class KeySegmentIndicesWriter:
         self.songs_to_key_segment_indices_dict[songname] = np.asarray(song_key_segment_indices)
 
     def convert_onset_to_eighth_note_beat_idx(self, onset):
-        """
+        """ Convert onset in quarters to eighth note beat index.
+
+        Parameters
+        ----------
+        onset : float
         """
         return int(onset // 0.5)
 
     def write_songs_to_key_segment_indices_dict_to_npz_file(self):
-        """
+        """ Output key segment indices for all songs to an Npz file.
         """
         self.npz_filehandler.write_content_to_npz_file(self.songs_to_key_segment_indices_dict,
                                                        self.output_npz_filename)

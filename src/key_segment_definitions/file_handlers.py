@@ -1,4 +1,4 @@
-""" Read and write npz and JSON files.
+""" Read and write Npz and JSON files.
 """
 import json
 import os
@@ -6,7 +6,7 @@ import os
 import numpy as np
 
 class FileHandler:
-    """
+    """ File handler base class.
     """
 
     def check_and_make_output_dir(self, filepath):
@@ -22,11 +22,11 @@ class FileHandler:
             os.mkdir(filepath_dir)
 
 class NpzFileHandler(FileHandler):
-    """
+    """ Reads/writes Npz files.
     """
 
     def read_npz_file(self, npz_filepath):
-        """ Read npz file.
+        """ Read Npz file.
 
         Parameters
         ----------
@@ -35,7 +35,7 @@ class NpzFileHandler(FileHandler):
         return dict(np.load(npz_filepath))
 
     def write_content_to_npz_file(self, file_content_dict, npz_filepath):
-        """ Write content to npz file.
+        """ Write content to Npz file.
 
         Parameters
         ----------
@@ -48,8 +48,7 @@ class NpzFileHandler(FileHandler):
             np.savez(npz_file, **file_content_dict)
 
 class JsonFileHandler(FileHandler):
-    """
-
+    """ Reads/writes JSON files.
     """
 
     def write_content_to_json_file(self, file_content_dict, json_filepath):

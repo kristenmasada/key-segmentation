@@ -1,4 +1,5 @@
-"""
+""" Implementation of thresholded version of Clear Key Segment
+Definition 2 from thesis.
 """
 
 import music21
@@ -10,7 +11,13 @@ from thresholded_basic_key_segment_annotator import ThresholdedBasicKeySegmentAn
 NUM_TRIAD_NOTES = 3
 
 class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
-    """
+    """ Implementation of thresholded version of Clear Key Segment
+    Definition 2 from thesis.
+    Checks for the following criteria when detecting key segments:
+    1. It begins on a *complete* I or V chord. 
+    2. It contains a V to I progression.
+    3. It ends on a *complete* I or V chord.
+    4. Any non-scale note is a figuration.
     """
     
     def __init__(self, parsed_mxl, rntxt_analysis, measure_onset_finder,
@@ -27,14 +34,20 @@ class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
             The index associated with the last measure in the song.
         thresholded_key_segment_indices : list of [int, int]
         min_key_segment_quarter_length : int
-            The minimum length a key segment should be in quarter note duration.
+            The minimum length a key segment should be in quarter note
+            duration.
         """
         self.song_key_segment_exporter = KeySegmentExporter(parsed_mxl, measure_onset_finder)
         super().__init__(parsed_mxl, rntxt_analysis, measure_onset_finder,
                          thresholded_key_segment_indices, **kwargs)
 
     def trim_key_segment_to_start_on_allowable_chord(self, key_segment):
-        """
+        """ Trim the starting time of the key segment to ensure that the
+        segment starts on a *complete* I or V chord.
+
+        Parameters
+        ----------
+        key_segment : KeySegment
         """
         new_key_onset, new_start_measure_num, new_rntxt_chord_idx = None, None, None
         for rntxt_chord_idx, rntxt_chord in enumerate(key_segment.rntxt_chords):
@@ -58,14 +71,35 @@ class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
             return key_segment 
 
     def check_if_rntxt_chord_is_allowable_start_chord(self, rntxt_chord_idx, rntxt_chords, key_segment):
-        """
+        """ Check if RomanText chord is an allowable start chord (i.e.
+        a complete I or V chord).
+
+        Parameters
+        ----------
+        rntxt_chord_idx : int
+        rntxt_chords : list of music21.roman.RomanNumeral
+        key_segment : KeySegment
         """
         return self.check_if_rntxt_chord_is_allowable_start_or_end_chord(rntxt_chord_idx, rntxt_chords,
                                                                          key_segment)
 
     def check_if_rntxt_chord_is_allowable_start_or_end_chord(self, rntxt_chord_idx, rntxt_chords,
                                                              key_segment):
-        """ Check if complete I or V triad.
+        """ Check if RomanText chord is an allowable start or end chord (i.e. a complete I
+        or V triad).
+
+        This involves physically checking the notes that appear in the
+        start/end chord segment of the musical score and ensuring that
+        all notes of the triad appear at least once. It does not matter
+        if the chord label denotes a complete chord---if 1 or more of
+        the pitches in the chord do not appear in the score for this
+        chord segment, then the chord is considered to be incomplete.
+
+        Parameters
+        ----------
+        rntxt_chord_idx : int
+        rntxt_chords : list of music21.roman.RomanNumeral
+        key_segment : KeySegment
         """
         current_rntxt_chord = rntxt_chords[rntxt_chord_idx]
 
@@ -82,7 +116,18 @@ class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
             return False
 
     def get_key_segment_from_single_rntxt_chord(self, rntxt_chord_idx, rntxt_chords, key_segment):
-        """
+        """ Create a KeySegment object out of a single RomanText chord.
+        This KeySegment object is later used to help check the MusicXML
+        score to see if all notes of the start/end chord truly appear
+        on the score (i.e. to verify if the start/end chords are truly
+        complete according to the notes that appear in this section of
+        the score).
+
+        Parameters
+        ----------
+        rntxt_chord_idx : int
+        rntxt_chords : list of music21.roman.RomanNumeral
+        key_segment : KeySegment
         """
         current_rntxt_chord = rntxt_chords[rntxt_chord_idx]
         current_key_segment = KeySegment(first_rntxt_chord=current_rntxt_chord,
@@ -98,7 +143,11 @@ class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
         return current_key_segment
 
     def get_triad_pitches_in_rntxt_chord(self, rntxt_chord):
-        """
+        """ Get the chord tones of the RomanText chord.
+
+        Parameters
+        ----------
+        rntxt_chord : music21.roman.RomanNumeral
         """
         rntxt_triad_pitches = []
 
@@ -114,16 +163,14 @@ class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
         return rntxt_triad_pitches
 
     def check_if_rntxt_chord_is_complete_triad(self, parsed_mxl_key_segment, chord_triad_pitches):
-        """
+        """ Check to see which notes appear on the score in the
+        start/end chord segment and see if they form a complete
+        triad.
 
         Parameters
         ----------
         parsed_mxl_key_segment : music21.stream.Score
-        chord_pitches : list of str
-
-        Notes
-        -----
-        What does Micchi do about notes that have a duration less than a 32nd?
+        chord_triad_pitches : list of str
         """
         key_segment_notes = parsed_mxl_key_segment.flat.getElementsByClass([music21.note.Note, music21.chord.Chord])
         key_segment_pitches = set()
@@ -143,7 +190,14 @@ class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
         return full_triad_coverage
 
     def trim_key_segment_to_end_on_allowable_chord(self, key_segment):
-        """
+        """ Trim key segment to end on a complete I or V chord
+        (this requires physically checking the notes in the score
+        to see if all three notes of the I or V chord appear at
+        least once).
+
+        Parameters
+        ----------
+        key_segment : KeySegment 
         """
         for rntxt_chord_reverse_idx, rntxt_chord in enumerate(key_segment.rntxt_chords[::-1]):
             rntxt_chord_idx = len(key_segment.rntxt_chords) - rntxt_chord_reverse_idx - 1
@@ -158,6 +212,13 @@ class ThresholdedStrictKeySegmentAnnotator(ThresholdedBasicKeySegmentAnnotator):
         return key_segment
 
     def check_if_rntxt_chord_is_allowable_end_chord(self, rntxt_chord_idx, rntxt_chords, key_segment):
-        """ Check if complete I or V triad.
+        """ Check if RomanText chord is an allowable end chord (i.e.
+        a complete I or V chord).
+
+        Parameters
+        ----------
+        rntxt_chord_idx : int
+        rntxt_chords : list of music21.roman.RomanNumeral
+        key_segment : KeySegment
         """
         return self.check_if_rntxt_chord_is_allowable_start_or_end_chord(rntxt_chord_idx, rntxt_chords, key_segment)

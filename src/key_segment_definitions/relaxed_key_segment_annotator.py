@@ -1,4 +1,4 @@
-"""
+""" Implementation of Clear Key Segment Definition 3 from thesis.
 """
 
 import re
@@ -6,12 +6,17 @@ import re
 from basic_key_segment_annotator import BasicKeySegmentAnnotator
 
 class RelaxedKeySegmentAnnotator(BasicKeySegmentAnnotator):
-    """
+    """ Implementation of Clear Key Segment Definition 3 from thesis.
+    Checks for the following criteria when detecting key segments:
+    1. It begins on a tonic chord or dominant harmony. 
+    2. It contains a progression from dominant harmony to a tonic chord.
+    3. It ends on a tonic or dominant harmony.
+    4. Any non-scale note is a figuration.
     """
 
     def __init__(self, parsed_mxl, rntxt_analysis, measure_onset_finder,
                  **kwargs):
-        """ Implementation of Clear Key Segment Definition 3 from thesis.
+        """
 
         Parameters
         ----------
@@ -35,7 +40,8 @@ class RelaxedKeySegmentAnnotator(BasicKeySegmentAnnotator):
                          **kwargs)
 
     def remove_key_segments_without_V_to_I_progression(self, key_segments):
-        """
+        """ Remove any key segments that do not contain a progression
+        from dominant harmony (i.e. V or VII) to a I chord.
 
         Parameters
         ----------
@@ -54,11 +60,14 @@ class RelaxedKeySegmentAnnotator(BasicKeySegmentAnnotator):
         return key_segments_w_dom_harm_to_I_progs
 
     def check_if_rntxt_chord_is_V_or_VII_chord(self, rntxt_chord):
-        """
+        """ Check if the current RomanText chord is part of dominant
+        harmony (i.e. a V or VII chord). If the user has specified
+        that root position VII chords should not be counted, take this
+        into account.
 
         Parameters
         ----------
-        rntxt_chord : 
+        rntxt_chord : music21.roman.RomanNumeral
         """
         if rntxt_chord.romanNumeralAlone.lower() == "v":
             return True
@@ -73,11 +82,11 @@ class RelaxedKeySegmentAnnotator(BasicKeySegmentAnnotator):
             return False
 
     def check_if_rntxt_chord_is_an_inverted_chord(self, rntxt_chord):
-        """
+        """ Check if the current RomanText chord is inverted.
 
         Parameters
         ----------
-        rntxt_chord :
+        rntxt_chord : music21.roman.RomanNumeral
         """
         inverted_chord_search = re.search(self.inverted_chord_regex, rntxt_chord.figure)
         if inverted_chord_search:
@@ -86,11 +95,12 @@ class RelaxedKeySegmentAnnotator(BasicKeySegmentAnnotator):
             return False
 
     def check_if_rntxt_chord_is_allowable_start_chord(self, rntxt_chord):
-        """
+        """ Check if the current RomanText chord is an allowable start
+        chord (either I, V, or VII).
 
         Parameters
         ----------
-        rntxt_chord : 
+        rntxt_chord : music21.roman.RomanNumeral
         """
         if self.check_if_rntxt_chord_is_I_chord(rntxt_chord):
             return True
@@ -100,11 +110,12 @@ class RelaxedKeySegmentAnnotator(BasicKeySegmentAnnotator):
             return False
 
     def check_if_rntxt_chord_is_allowable_end_chord(self, rntxt_chord):
-        """
+        """ Check if the current RomanText chord is an allowable end
+        chord (either I, VI, V, or VII).
 
         Parameters
         ----------
-        rntxt_chord : 
+        rntxt_chord : music21.roman.RomanNumeral
         """
         if self.check_if_rntxt_chord_is_I_chord(rntxt_chord):
             return True
@@ -116,11 +127,11 @@ class RelaxedKeySegmentAnnotator(BasicKeySegmentAnnotator):
             return False
 
     def check_if_rntxt_chord_is_VI_chord(self, rntxt_chord):
-        """
+        """ Check if the current RomanText chord is a VI chord.
 
         Parameters
         ----------
-        rntxt_chord :
+        rntxt_chord : music21.roman.RomanNumeral
         """
         if rntxt_chord.romanNumeralAlone.lower() == "vi":
             return True

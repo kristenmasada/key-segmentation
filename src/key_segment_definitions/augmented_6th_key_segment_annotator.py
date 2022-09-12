@@ -1,9 +1,8 @@
 """ Implementation of Clear Key Segment Definition 7 from thesis.
 """
 
-from relaxed_key_segment_annotator import RelaxedKeySegmentAnnotator
-
 from foreign_note_detector import ForeignNoteDetector
+from relaxed_key_segment_annotator import RelaxedKeySegmentAnnotator
 
 class Augmented6thKeySegmentAnnotator(RelaxedKeySegmentAnnotator):
     """ Implementation of Clear Key Segment Definition 7 from thesis.

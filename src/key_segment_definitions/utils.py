@@ -1,5 +1,4 @@
-""" Miscellaneous utility functions, mostly for loading
-files.
+""" Miscellaneous utility functions.
 """
 
 import os

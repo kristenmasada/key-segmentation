@@ -1,14 +1,17 @@
-"""
+""" Compute and output the whole segment accuracy and the
+whole segment event-based accuracy for all songs.
 """
 
-from matplotlib import pyplot as plt
 import numpy as np
 
-from fragmentation_computer import FragmentationComputer
 from accuracy_computer_utils import compute_key_segment_length, \
                                     truncate_song_event_key_probs_one_event_longer_than_ground_truth_labels
+from fragmentation_computer import FragmentationComputer
 
 class SongWholeSegmentKeyAccuracyComputer:
+    """ Compute and output the whole segment accuracy and the
+    whole segment event-based accuracy for one song.
+    """
 
     def __init__(self, micchi_model_event_key_predictions, ground_truth_event_key_labels,
                  key_segment_indices, verbose=False):
@@ -34,7 +37,8 @@ class SongWholeSegmentKeyAccuracyComputer:
         self.verbose = verbose
 
     def get_correct_whole_segments(self):
-        """
+        """ Get the list of key segments that are predicted
+        entirely correctly.
         """
         correct_whole_segments = []
         for key_segment_idx in self.key_segment_indices:
@@ -48,11 +52,12 @@ class SongWholeSegmentKeyAccuracyComputer:
         return correct_whole_segments
 
     def compute_whole_segment_key_accuracy_stats(self, correct_whole_key_segment_indices):
-        """
+        """ Compute the statistics needed to compute the whole segment accuracy
+        and the whole segment event-level accuracy.
 
         Parameters
         ----------
-        correct_whole_key_segment_indices : 
+        correct_whole_key_segment_indices : list of [int, int] 
         """
         song_num_correct_whole_segments = len(correct_whole_key_segment_indices) 
         song_num_segments = len(self.key_segment_indices) 
@@ -64,7 +69,12 @@ class SongWholeSegmentKeyAccuracyComputer:
                song_num_correct_whole_segment_events, song_num_segment_events
 
     def compute_num_events_in_segments(self, key_segments):
-        """
+        """ Compute the total number of events over all key
+        segments.
+
+        Parameters
+        ----------
+        key_segments : list of [int, int]
         """
         num_segment_events = 0
         for key_segment in key_segments:
@@ -72,9 +82,19 @@ class SongWholeSegmentKeyAccuracyComputer:
 
         return num_segment_events
 
-    def compute_and_output_whole_segment_key_accuracies(self, song_num_correct_whole_segments, song_num_segments,
-                                                        song_num_correct_whole_segment_events, song_num_segment_events):
-        """
+    def compute_and_output_whole_segment_key_accuracies(self, song_num_correct_whole_segments,
+                                                        song_num_segments,
+                                                        song_num_correct_whole_segment_events,
+                                                        song_num_segment_events):
+        """ For a single song, compute and output the whole segment accuracy
+        and the whole segment event-level accuracy.
+
+        Parameters
+        ----------
+        song_num_correct_whole_segments : int
+        song_num_segments : int 
+        song_num_correct_whole_segment_events : int
+        song_num_segment_events : int
         """
         if song_num_segments == 0:
             percentage_correct_whole_segments = 0
@@ -91,6 +111,9 @@ class SongWholeSegmentKeyAccuracyComputer:
         print("Percentage of segments that are entirely correct (by events): {}% ({}/{})".format(percentage_correct_whole_segment_events, song_num_correct_whole_segment_events, song_num_segment_events))
 
 class WholeSegmentKeyAccuracyComputer:
+    """ Compute and output the whole segment accuracy and the
+    whole segment event-based accuracy for all songs.
+    """
 
     def __init__(self, song_event_key_preds_dict, ground_truth_key_labels_dict,
                  key_segment_indices_dict, verbose=False):
@@ -119,7 +142,9 @@ class WholeSegmentKeyAccuracyComputer:
         self.correct_whole_key_segments_dict = {}
 
     def compute_whole_segment_key_accuracies_for_each_song(self):
-        """
+        """ Compute the statistics needed to compute the whole segment
+        accuracy and the whole segment event-based accuracy for all
+        songs in consideration.
         """
         for songname in self.song_event_key_preds_dict: 
 
@@ -166,7 +191,8 @@ class WholeSegmentKeyAccuracyComputer:
             self.overall_num_segment_events += song_num_segment_events
 
     def compute_whole_segment_key_accuracies_for_all_songs(self):
-        """
+        """ Compute and output the whole segment accuracy and the
+        whole segment event-based accuracy for all songs in consideration.
         """
         self.compute_whole_segment_key_accuracies_for_each_song()
 
@@ -182,7 +208,7 @@ class WholeSegmentKeyAccuracyComputer:
         print()
 
     def compute_fragmentation_for_all_songs(self):
-        """
+        """ Compute the average segment length for all songs in consideration.
         """
         fragmentation_computer = FragmentationComputer(self.correct_whole_key_segments_dict)
         fragmentation_computer.compute_and_output_avg_segment_len()

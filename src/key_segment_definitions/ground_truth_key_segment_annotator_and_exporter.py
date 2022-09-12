@@ -1,4 +1,6 @@
-"""
+""" Extract clear key segments from specified songs in Micchi, et al.'s
+Meta-Corpus using the ground truth key and chord annotations from the
+Meta-Corpus.
 """
 
 from argparse import ArgumentParser
@@ -55,8 +57,6 @@ class GroundTruthKeySegmentAnnotatorAndExporter:
         elif self.output_method == "output_key_segment_indices":
             self.key_segment_indices_writer = KeySegmentIndicesWriter(key_segment_annotator_class,
                                                                       allow_root_position_viio_chords=allow_root_position_viio_chords)
-        elif self.output_method == "modify_csv_files":
-            self.csv_file_modifier = CSVFileModifier(key_segment_annotator_class)
 
     def convert_mxl_filepaths_to_rntxt_filepaths(self, mxl_filepaths):
         """ Get RomanText (i.e. rntxt) filepaths from MusicXML (mxl)
@@ -115,8 +115,6 @@ class GroundTruthKeySegmentAnnotatorAndExporter:
             self.excluded_events_writer.get_excluded_events_for_song(key_segments, mxl_filepath)
         elif self.output_method == "output_key_segment_indices":
             self.key_segment_indices_writer.get_key_segment_indices_for_song(key_segments, mxl_filepath)
-        elif self.output_method == "modify_csv_files":
-            self.csv_file_modifier.modify_csv_chords_to_align_w_key_segments(key_segments, mxl_filepath)
 
 def get_commandline_args():
     """ Get commandline arguments from user.
@@ -163,11 +161,9 @@ def get_commandline_args():
     parser.add_argument('--key_segments_output_method', type=str,
                         choices=['export_key_segments',
                                  'output_events_to_exclude',
-                                 'modify_csv_files',
                                  'output_key_segment_indices'],
                         help='`export_key_segments` - '
                              '`output_events_to_exclude` - '
-                             '`modify_csv_files` - '
                              '`output_key_segment_indices` - ')
 
     parser.add_argument('--ground_truth_key_labels_npz_path', type=str,
