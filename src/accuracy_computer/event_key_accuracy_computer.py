@@ -7,7 +7,6 @@ from argparse import ArgumentParser
 import numpy as np
 
 from file_handlers import NpzFileHandler
-from majority_key_segment_labeler import MajorityKeySegmentLabeler
 from utils import exclude_events_outside_of_key_segments_from_event_key_labels, \
                   truncate_song_event_key_probs_one_event_longer_than_ground_truth_labels
 
@@ -16,7 +15,7 @@ class SongEventKeyAccuracyComputer:
     """
 
     def __init__(self, micchi_model_event_key_predictions, ground_truth_event_key_labels,
-                 key_segment_indices, use_majority_key_segment_labeling=False, verbose=False):
+                 key_segment_indices, verbose=False):
         """
 
         Parameters
@@ -25,10 +24,8 @@ class SongEventKeyAccuracyComputer:
         ground_truth_event_key_labels : np.ndarray (dtype='int64', shape=(no. events,))
             Each element is the index of the key prediction for that event.
         key_segment_indices : np.ndarray (dtype='int64', shape=(no. key segments, 2))
-        use_majority_key_segment_labeling : bool
         verbose : bool
         """
-        # By default, evaluate on all events + use modulation labels as ground truth for all events.
         self.ground_truth_event_key_labels = ground_truth_event_key_labels
         self.event_key_predictions = micchi_model_event_key_predictions
 
@@ -40,18 +37,9 @@ class SongEventKeyAccuracyComputer:
             self.ground_truth_event_key_labels = exclude_events_outside_of_key_segments_from_event_key_labels(
                                                                            self.ground_truth_event_key_labels,
                                                                                           key_segment_indices)
-            if use_majority_key_segment_labeling:
-                majority_key_segment_labeler = MajorityKeySegmentLabeler()
-                self.event_key_predictions = majority_key_segment_labeler.perform_majority_labeling(self.event_key_predictions,
-                                                                                                    key_segment_indices)
-            else:
-                self.event_key_predictions = exclude_events_outside_of_key_segments_from_event_key_labels(
-                                                                               self.event_key_predictions,
-                                                                                      key_segment_indices)
-        elif use_majority_key_segment_labeling:
-            majority_key_segment_labeler = MajorityKeySegmentLabeler()
-            self.event_key_predictions = majority_key_segment_labeler.perform_majority_labeling(self.event_key_predictions,
-                                                                                                key_segment_indices)
+            self.event_key_predictions = exclude_events_outside_of_key_segments_from_event_key_labels(
+                                                                            self.event_key_predictions,
+                                                                                    key_segment_indices)
 
         self.verbose = verbose
 
@@ -95,9 +83,9 @@ class EventKeyAccuracyComputer:
 
         Parameters
         ----------
-        song_event_key_preds_dict : dict of { str : np.ndarray (dtype='float32')}
-        ground_truth_key_labels_dict : dict of { str : np.ndarray (dtype='int64')}
-        key_segment_indices_dict : dict of { str : np.ndarray (dtype='int64')}
+        song_event_key_preds_dict : dict of { str : np.ndarray (dtype='float32') }
+        ground_truth_key_labels_dict : dict of { str : np.ndarray (dtype='int64') }
+        key_segment_indices_dict : dict of { str : np.ndarray (dtype='int64') }
         use_majority_key_segment_labeling : bool
         verbose : bool
         """
@@ -184,7 +172,7 @@ def get_commandline_args():
                              'predictions.')
     parser.add_argument('--ground_truth_key_labels_npz_path', type=str,
                         help='Path to .npz file containing the ground '
-                             'truth key labels for the same songs as '
+                             'truth key labels for the same songs as in '
                              '`--event_key_preds_npz_path`.')
     parser.add_argument('--key_segment_indices_npz_path', type=str,
                         help='Path to .npz file containing the events '
@@ -192,9 +180,6 @@ def get_commandline_args():
                              '`--event_key_preds_npz_path`. Can be used '
                              'to exclude tonicizations, exclude events '
                              'that don\'t belong to our key definition, etc.')
-    parser.add_argument('--use_majority_key_segment_labeling', action='store_true',
-                        help='Perform majority labeling inside of each key '
-                             'segment.')
 
     commandline_args = parser.parse_args()
 
@@ -213,10 +198,7 @@ if __name__ == '__main__':
     else:
         key_segment_indices_dict = None
 
-    use_majority_key_segment_labeling = args.use_majority_key_segment_labeling
-
     event_level_acc_computer = EventKeyAccuracyComputer(song_event_key_preds_dict,
                                                         ground_truth_key_labels_dict,
-                                                        key_segment_indices_dict,
-                                                        use_majority_key_segment_labeling)
+                                                        key_segment_indices_dict)
     event_level_acc_computer.compute_event_level_key_accuracy_for_all_songs()
