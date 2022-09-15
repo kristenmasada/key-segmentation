@@ -77,8 +77,7 @@ class EventKeyAccuracyComputer:
     """
 
     def __init__(self, song_event_key_preds_dict, ground_truth_key_labels_dict,
-                 key_segment_indices_dict, use_majority_key_segment_labeling=False,
-                 verbose=False):
+                 key_segment_indices_dict, verbose=False):
         """
 
         Parameters
@@ -86,7 +85,6 @@ class EventKeyAccuracyComputer:
         song_event_key_preds_dict : dict of { str : np.ndarray (dtype='float32') }
         ground_truth_key_labels_dict : dict of { str : np.ndarray (dtype='int64') }
         key_segment_indices_dict : dict of { str : np.ndarray (dtype='int64') }
-        use_majority_key_segment_labeling : bool
         verbose : bool
         """
         assert song_event_key_preds_dict.keys() == ground_truth_key_labels_dict.keys()
@@ -99,8 +97,6 @@ class EventKeyAccuracyComputer:
         self.overall_num_correct_events = 0
         self.overall_total_num_events = 0
 
-        self.use_majority_key_segment_labeling = use_majority_key_segment_labeling
-        
         self.verbose = verbose
 
     def check_songnames_in_key_predictions_vs_ground_truth_labels(self):
@@ -138,7 +134,6 @@ class EventKeyAccuracyComputer:
             song_event_key_accuracy_computer = SongEventKeyAccuracyComputer(song_event_key_preds,
                                                                             song_gt_key_labels,
                                                                             song_key_segment_indices,
-                                                                            self.use_majority_key_segment_labeling,
                                                                             self.verbose)
 
             song_num_correct_events, \

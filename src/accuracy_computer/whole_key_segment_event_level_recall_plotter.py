@@ -119,25 +119,16 @@ class WholeKeySegmentEventLevelRecallPlotter:
 
         c_ks_min_extracted_segment_count_x_idx = self.c_ks_segment_len_bins[self.c_ks_min_extracted_segment_count_idx]
         c_ks_min_extracted_segment_count_y_idx = self.c_ks_whole_segment_event_level_recalls[self.c_ks_min_extracted_segment_count_idx]
-        print("C-KS cutoff: idx: {} ({}, {})".format(self.c_ks_min_extracted_segment_count_idx,
-                                                     c_ks_min_extracted_segment_count_x_idx,
-                                                     c_ks_min_extracted_segment_count_y_idx))
         ax.plot(c_ks_min_extracted_segment_count_x_idx, c_ks_min_extracted_segment_count_y_idx,'o',
                 c='midnightblue') 
 
         t_ks_min_extracted_segment_count_x_idx = self.t_ks_segment_len_bins[self.t_ks_min_extracted_segment_count_idx]
         t_ks_min_extracted_segment_count_y_idx = self.t_ks_whole_segment_event_level_recalls[self.t_ks_min_extracted_segment_count_idx]
-        print("T-KS cutoff: idx: {} ({}, {})".format(self.t_ks_min_extracted_segment_count_idx,
-                                                     t_ks_min_extracted_segment_count_x_idx,
-                                                     t_ks_min_extracted_segment_count_y_idx))
         ax.plot(t_ks_min_extracted_segment_count_x_idx, t_ks_min_extracted_segment_count_y_idx,'o',
                 c='#ff7f0e') 
 
         ct_ks_min_extracted_segment_count_x_idx = self.ct_ks_segment_len_bins[self.ct_ks_min_extracted_segment_count_idx]
         ct_ks_min_extracted_segment_count_y_idx = self.ct_ks_whole_segment_event_level_recalls[self.ct_ks_min_extracted_segment_count_idx]
-        print("CT-KS cutoff: idx: {} ({}, {})".format(self.ct_ks_min_extracted_segment_count_idx,
-                                                      ct_ks_min_extracted_segment_count_x_idx,
-                                                      ct_ks_min_extracted_segment_count_y_idx))
         ax.plot(ct_ks_min_extracted_segment_count_x_idx, ct_ks_min_extracted_segment_count_y_idx,'o',
                 c='green') 
 
