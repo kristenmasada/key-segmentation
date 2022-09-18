@@ -14,16 +14,19 @@ class WholeKeySegmentPrecisionPlotter:
     (no. correctly predicted segments with length >= len) / (total no. predicted segments with length >= len)
     """
 
-    def __init__(self, c_ks_whole_key_segment_stats_computer, t_ks_whole_key_segment_stats_computer,
+    def __init__(self, clear_key_definition, c_ks_whole_key_segment_stats_computer, t_ks_whole_key_segment_stats_computer,
                  ct_ks_whole_key_segment_stats_computer):
         """
 
         Parameters
         ----------
+        clear_key_definition : str
         c_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         t_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         ct_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         """
+        self.clear_key_definition = clear_key_definition
+
         self.c_ks_segment_len_bins = c_ks_whole_key_segment_stats_computer.sorted_cumulative_segment_len_bins
         self.c_ks_whole_segment_precisions = self.compute_whole_segments_precisions(c_ks_whole_key_segment_stats_computer.sorted_cumulative_segment_len_bins,
                                                                                     c_ks_whole_key_segment_stats_computer.correct_whole_predicted_segments_w_min_seg_len_count_dict,
@@ -110,9 +113,9 @@ class WholeKeySegmentPrecisionPlotter:
     def get_seg_len_vs_precision_plot_title(self):
         """ Get segment length vs. precision plot title.
         """
-        return "Segment Len. vs. Precision" 
+        return "Segment Len. vs. Precision ({})".format(self.clear_key_definition)
 
     def get_seg_len_vs_precision_plot_filename(self):
         """ Get segment length vs. precision plot filename.
         """
-        return "out/plots/micchi_model2021_segment_lens_vs_precision"
+        return "out/plots/meta-corpus_validation_precision_plot_" + self.clear_key_definition

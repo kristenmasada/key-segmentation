@@ -14,16 +14,18 @@ class WholeKeySegmentRecallPlotter:
     (no. correctly predicted segments with length >= len) / (no. ground truth segments with length >= len) 
     """
 
-    def __init__(self, c_ks_whole_key_segment_stats_computer, t_ks_whole_key_segment_stats_computer,
+    def __init__(self, clear_key_definition, c_ks_whole_key_segment_stats_computer, t_ks_whole_key_segment_stats_computer,
                  ct_ks_whole_key_segment_stats_computer):
         """
 
         Parameters
         ----------
+        clear_key_definition : str
         c_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         t_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         ct_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         """
+        self.clear_key_definition = clear_key_definition
         self.c_ks_segment_len_bins = sorted(list(c_ks_whole_key_segment_stats_computer.ground_truth_segments_w_min_seg_len_event_count_dict.keys()))
         self.c_ks_whole_segment_recalls = self.get_segment_recall_stats(c_ks_whole_key_segment_stats_computer)
 
@@ -101,9 +103,9 @@ class WholeKeySegmentRecallPlotter:
     def get_seg_len_vs_recall_plot_title(self):
         """ Get segment length vs. recall plot title.
         """
-        return "Segment Len. vs. Recall (Def. 1)" 
+        return "Segment Len. vs. Recall ({})".format(self.clear_key_definition)
 
     def get_seg_len_vs_recall_plot_filename(self):
         """ Get segment length vs. recall plot filename.
         """
-        return "out/plots/basic_micchi_model2021_segment_lens_vs_recall"
+        return "out/plots/meta-corpus_validation_recall_plot_" + self.clear_key_definition

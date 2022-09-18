@@ -10,19 +10,20 @@ class WholeKeySegmentLenCountPlotter:
     """ Used to plot the segment count for each segment length.
     """
 
-    def __init__(self, c_ks_whole_key_segment_stats_computer, t_ks_whole_key_segment_stats_computer,
-                 ct_ks_whole_key_segment_stats_computer, clear_key_segment_type=None, plot_in_log_space=False):
+    def __init__(self, clear_key_definition, c_ks_whole_key_segment_stats_computer, t_ks_whole_key_segment_stats_computer,
+                 ct_ks_whole_key_segment_stats_computer, plot_in_log_space=False):
         """
 
         Parameters
         ----------
+        clear_key_definition : str
         c_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         t_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         ct_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
-        clear_key_segment_type : str
-            Key segment definition used to create the clear key segments.
         plot_in_log_space : bool
         """
+        self.clear_key_definition = clear_key_definition
+
         self.c_ks_segment_len_bins = c_ks_whole_key_segment_stats_computer.sorted_cumulative_segment_len_bins
         self.c_ks_correct_whole_segments_w_min_seg_len_count = c_ks_whole_key_segment_stats_computer.sorted_correct_whole_predicted_segments_w_min_seg_len_count
         self.c_ks_predicted_segments_w_min_seg_len_count = c_ks_whole_key_segment_stats_computer.sorted_predicted_segments_w_min_seg_len_count
@@ -44,8 +45,6 @@ class WholeKeySegmentLenCountPlotter:
         self.plot_in_log_space = plot_in_log_space
 
         self.X_AXIS_UPPER_LIM = 250.0
-
-        self.clear_key_segment_type = clear_key_segment_type
 
     def compute_whole_segments_acc(self, correct_whole_segments_w_min_seg_len_count, predicted_segments_w_min_seg_len_count):
         """ Compute the cumulative accuracy (equivalent to the whole key segment precision*)
@@ -141,13 +140,13 @@ class WholeKeySegmentLenCountPlotter:
         """ Get the title for the segment length vs. no. correct
         segments in log space plot. 
         """
-        return "Segment Len. vs. Log Cum. No. Correct Whole Segments" 
+        return "Segment Len. vs. Log Cum. No. Correct Whole Segments ({})".format(self.clear_key_definition)
 
     def get_seg_len_vs_correct_segments_in_log_space_output_plot_filename(self):
         """ Get the output filename for the segment length vs. no.
         correct segments in log space plot.
         """
-        return "out/plots/micchi_model2021_segment_lens_vs_log_correct_whole_segments"
+        return "out/plots/meta-corpus_validation_log_correct_whole_segments_plot_" + self.clear_key_definition
 
     def plot_seg_len_vs_correct_segments(self):
         """ Plot segment lengths vs. no. of entirely correct 
@@ -228,13 +227,10 @@ class WholeKeySegmentLenCountPlotter:
         """ Get the title for the segment length vs. no. correct
         segments plot. 
         """
-        return "Segment Lengths vs. Cumulative No. Correct Whole Segments" 
+        return "Segment Lengths vs. Cumulative No. Correct Whole Segments ({})".format(self.clear_key_definition)
 
     def get_seg_len_vs_correct_segments_output_plot_filename(self):
         """ Get the output filename for the segment length vs. no.
         correct segments plot.
         """
-        if self.clear_key_segment_type is not None:
-            return "out/plots/" + self.clear_key_segment_type + "_micchi_model2021_segment_lens_vs_correct_whole_segments"
-        else:
-            return "out/plots/micchi_model2021_segment_lens_vs_correct_whole_segments"
+        return "out/plots/meta-corpus_validation_correct_whole_segments_plot_" + self.clear_key_definition

@@ -20,12 +20,14 @@ class WholeKeySegmentEventLevelRecallPlotter:
     (total no. events in correctly predicted segments with length >= len) / (total no. events in song)
     """
 
-    def __init__(self, c_ks_whole_key_segment_stats_computer, t_ks_whole_key_segment_stats_computer,
-                 ct_ks_whole_key_segment_stats_computer, use_total_num_events_as_divisor=True):
+    def __init__(self, clear_key_definition, c_ks_whole_key_segment_stats_computer,
+                 t_ks_whole_key_segment_stats_computer, ct_ks_whole_key_segment_stats_computer,
+                 use_total_num_events_as_divisor=True):
         """
 
         Parameters
         ----------
+        clear_key_definition : str
         c_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         t_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
         ct_ks_whole_key_segment_stats_computer : WholeKeySegmentStatsComputer
@@ -33,6 +35,8 @@ class WholeKeySegmentEventLevelRecallPlotter:
             If true, to compute the event-level recall values, divide by (total no. events
             in song) instead of (total no. events in the ground truth segments with length ≥ len).
         """
+        self.clear_key_definition = clear_key_definition
+
         self.c_ks_segment_len_bins = sorted(list(c_ks_whole_key_segment_stats_computer.ground_truth_segments_w_min_seg_len_event_count_dict.keys()))
         self.c_ks_whole_segment_event_level_recalls = self.get_segment_event_level_recalls_stats(c_ks_whole_key_segment_stats_computer, use_total_num_events_as_divisor)
         self.c_ks_min_extracted_segment_count_idx = c_ks_whole_key_segment_stats_computer.min_extracted_segment_count_idx
@@ -143,9 +147,9 @@ class WholeKeySegmentEventLevelRecallPlotter:
     def get_seg_len_vs_event_level_recall_plot_title(self):
         """ Get segment length vs. event-level recall plot title.
         """
-        return "Segment Len. vs. Event-Level Recall (Def. 4)" 
+        return "Segment Len. vs. Event-Level Recall ({})".format(self.clear_key_definition)
 
     def get_seg_len_vs_event_level_recall_plot_filename(self):
         """ Get segment length vs. event-level recall plot filename.
         """
-        return "out/plots/chromatic_micchi_model2021_segment_lens_vs_event_level_recall"
+        return "out/plots/meta-corpus_validation_event_level_recall_plot_" + self.clear_key_definition
