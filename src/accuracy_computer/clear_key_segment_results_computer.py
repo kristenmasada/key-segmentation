@@ -12,6 +12,7 @@ from clear_key_precision_recall_computer import ClearKeyPrecisionRecallComputer
 from complete_piece_recall_coverage_computer import CompletePieceRecallCoverageComputer
 from event_key_accuracy_computer import EventKeyAccuracyComputer
 from file_handlers import NpzFileHandler
+from fragmentation_computer import FragmentationComputer
 from utils import convert_one_hot_vector_events_to_event_key_labels, \
                   remove_songs_to_ignore_from_dict
 from whole_segment_key_accuracy_computer import WholeSegmentKeyAccuracyComputer
@@ -88,7 +89,11 @@ class ClearKeySegmentResultsComputer:
                                                                               self.verbose)
         clear_key_precision_recall_computer.compute_precision_and_recall_for_all_songs()
 
-        print("Complete piece recall and coverage:")
+        print("Fragmentation results:")
+        fragmentation_computer = FragmentationComputer(self.pred_key_segment_boundaries_dict)
+        fragmentation_computer.compute_and_output_avg_segment_len()
+
+        print("\nComplete piece recall and coverage:")
         complete_piece_recall_coverage_computer = CompletePieceRecallCoverageComputer(num_correctly_predicted_events,
                                                                                       num_events_in_predicted_segments,
                                                                                       self.ground_truth_key_labels_dict)

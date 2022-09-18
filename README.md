@@ -30,7 +30,7 @@ cd src/accuracy_computer
 cd src/accuracy_computer
 
 # Table 6.3:
-
+./clear_key_segment_results_computer.sh
 
 # Table 6.4:
 ./thresholded_micchi_model.sh
@@ -49,10 +49,6 @@ cd src/accuracy_computer
 ```
 cd src/accuracy_computer
 ./whole_key_segment_stats_plotter.sh
-```
-
-#### Train Micchi, et al.'s Frog model:
-```
 ```
 
 #### Extract Key Segments:
