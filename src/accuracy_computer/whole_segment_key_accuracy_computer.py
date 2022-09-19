@@ -75,7 +75,6 @@ class SongWholeSegmentKeyAccuracyComputer:
         Parameters
         ----------
         key_segments : list of [int, int]
-
         """
         num_segment_events = 0
         for key_segment in key_segments:
@@ -189,22 +188,24 @@ class WholeSegmentKeyAccuracyComputer:
             self.overall_num_correct_whole_segment_events += song_num_correct_whole_segment_events
             self.overall_num_segment_events += song_num_segment_events
 
-    def compute_whole_segment_key_accuracies_for_all_songs(self):
+    def compute_whole_segment_key_accuracies_for_all_songs(self, verbose=True):
         """ Compute and output the whole segment accuracy and the
         whole segment event-based accuracy for all songs in consideration.
         """
         self.compute_whole_segment_key_accuracies_for_each_song()
 
         overall_whole_segment_acc = (self.overall_num_correct_whole_segments / self.overall_num_segments) * 100.0
-        print("\nOverall whole segment accuracy {:.1f}% ({}/{})".format(overall_whole_segment_acc,
-                                                                        self.overall_num_correct_whole_segments,
-                                                                        self.overall_num_segments))
+        if verbose:
+            print("\nOverall whole segment accuracy {:.1f}% ({}/{})".format(overall_whole_segment_acc,
+                                                                            self.overall_num_correct_whole_segments,
+                                                                            self.overall_num_segments))
 
         overall_whole_segment_event_acc = (self.overall_num_correct_whole_segment_events / self.overall_num_segment_events) * 100.0
-        print("Overall whole segment event accuracy {:.1f}% ({}/{})".format(overall_whole_segment_event_acc,
-                                                                            self.overall_num_correct_whole_segment_events,
-                                                                            self.overall_num_segment_events))
-        print()
+        if verbose:
+            print("Overall whole segment event accuracy {:.1f}% ({}/{})".format(overall_whole_segment_event_acc,
+                                                                                self.overall_num_correct_whole_segment_events,
+                                                                                self.overall_num_segment_events))
+            print()
 
     def compute_fragmentation_for_all_songs(self):
         """ Compute the average segment length for all songs in consideration.

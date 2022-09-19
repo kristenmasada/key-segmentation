@@ -152,7 +152,7 @@ class EventKeyAccuracyComputer:
         self.compute_event_level_key_accuracy_for_each_song()
 
         overall_event_level_accuracy = (self.overall_num_correct_events / self.overall_total_num_events) * 100.0
-        print("Overall event-level accuracy {:.4f}% ({}/{})".format(overall_event_level_accuracy, self.overall_num_correct_events,
+        print("Overall event-level accuracy {:.1f}% ({}/{})".format(overall_event_level_accuracy, self.overall_num_correct_events,
                                                                     self.overall_total_num_events))
         print()
 

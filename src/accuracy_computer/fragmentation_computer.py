@@ -40,11 +40,17 @@ class FragmentationComputer:
         """
         avg_segment_len, total_num_segment_events, num_segments = self.compute_avg_segment_len()
 
-        print("Fragmentation (i.e. avg. segment length) (threshold: {:.3f}): {:.2f} ({} total no. segment events/{} no. segments)".format(
-                                                                                                self.threshold,
-                                                                                                avg_segment_len,
-                                                                                                total_num_segment_events,
-                                                                                                num_segments))
+        if self.threshold == -1.0:
+            print("Avg. segment length: {:.2f} ({} total no. segment events / {} no. segments)".format(
+                                                                                        avg_segment_len,
+                                                                                        total_num_segment_events,
+                                                                                        num_segments))
+        else:
+            print("Avg. segment length (threshold: {:.3f}): {:.2f} ({} total no. segment events / {} no. segments)".format(
+                                                                                        self.threshold,
+                                                                                        avg_segment_len,
+                                                                                        total_num_segment_events,
+                                                                                        num_segments))
 
     def compute_avg_segment_len(self):
         """ Compute the average segment length over all songs.

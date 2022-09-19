@@ -30,7 +30,7 @@ cd src/accuracy_computer
 cd src/accuracy_computer
 
 # Table 6.3:
-./clear_key_segment_results_computer.sh
+./clear_key_segment_fragmentation_computer.sh
 
 # Table 6.4:
 ./thresholded_micchi_model.sh
@@ -38,10 +38,16 @@ cd src/accuracy_computer
 
 ##### Recreate Tables 6.5-6.8 (Whole Key Segment) Results:
 ```
-# Tables 6.5 and 6.7:
-./clear_key_segment_results_computer.sh
+# Table 6.5:
+./whole_clear_key_segment_results_computer.sh
 
-# Tables 6.6 and 6.8:
+# Tables 6.6:
+./thresholded_micchi_model.sh
+
+# Table 6.7:
+./whole_clear_key_segment_fragmentation_computer.sh
+
+# Table 6.8:
 ./thresholded_micchi_model.sh
 ```
 

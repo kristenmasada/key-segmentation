@@ -187,11 +187,11 @@ class ClearKeyPrecisionRecallComputer:
         self.compute_precision_and_recall_for_each_song()
 
         overall_precision = (self.overall_num_correct_pred_events_in_gt_segments / self.overall_total_num_pred_events) * 100.0
-        print("Overall precision {:.4f}% ({}/{})".format(overall_precision, self.overall_num_correct_pred_events_in_gt_segments,
+        print("Overall precision {:.1f}% ({}/{})".format(overall_precision, self.overall_num_correct_pred_events_in_gt_segments,
                                                          self.overall_total_num_pred_events))
 
         overall_recall = (self.overall_num_correct_pred_events_in_gt_segments / self.overall_total_num_gt_events) * 100.0
-        print("Overall recall {:.4f}% ({}/{})".format(overall_recall, self.overall_num_correct_pred_events_in_gt_segments,
+        print("Overall recall {:.1f}% ({}/{})".format(overall_recall, self.overall_num_correct_pred_events_in_gt_segments,
                                                       self.overall_total_num_gt_events))
         print()
 

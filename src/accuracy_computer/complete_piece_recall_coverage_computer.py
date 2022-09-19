@@ -43,9 +43,9 @@ class CompletePieceRecallCoverageComputer:
         coverage over all of the songs.
         """
         recall = (self.num_correctly_predicted_events / self.total_num_events) * 100.0
-        print("Recall: {:.4f}% ({}/{})".format(recall, self.num_correctly_predicted_events,
+        print("Recall: {:.1f}% ({}/{})".format(recall, self.num_correctly_predicted_events,
                                                self.total_num_events))
 
         coverage = (self.num_events_in_predicted_segments / self.total_num_events) * 100.0
-        print("Coverage: {:.4f}% ({}/{})".format(coverage, self.num_events_in_predicted_segments,
+        print("Coverage: {:.1f}% ({}/{})".format(coverage, self.num_events_in_predicted_segments,
                                                  self.total_num_events))

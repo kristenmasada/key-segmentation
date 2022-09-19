@@ -1,9 +1,28 @@
-""" Compute the results included in Table 6.1 of thesis for key
-segments generated using one of the 9 clear key segment definitions
-(Accuracy w.r.t. true boundaries [TB] and system boundaries [SB];
-Precision and Recall with respect to the ground truth C-KS;
-Recall with respect to the complete piece; Coverage is the
-proportion of a complete piece covered by predicted C-KS).
+""" Used to compute all results on the clear key segments.
+This includes the results provided in Tables 6.1, 6.3, 6.5,
+and 6.7 in the thesis.
+
+Table 6.1 - Clear key segments (C-KS) results and statistics
+(%): Accuracy with respect to true boundaries (TB) and system
+boundaries (SB); Precision and Recall with respect to the
+ground truth C-KS; Recall with respect to the complete piece;
+Coverage is the proportion of a complete piece covered by
+predicted C-KS.
+
+Table 6.3 - Fragmentation computed for C-KS: Average Segment
+Length of C-KS; total number of Segment Events in C-KS; total
+number of C-KS Segments. Each event is the length of an eighth
+note.
+
+Table 6.5 - Results for Whole Clear Key Segments (WC-KS): Whole
+Segment Accuracy; Whole Segment Event-Level Accuracy. Extracted
+segment is correct if the key labels for all events in the
+segment are correct. 
+
+Table 6.7 - Fragmentation computed for WC-KS: Average Segment
+Length of WC-KS; total number of Segment Events in WC-KS; total
+number of WC-KS Segments. Each event is the length of an eighth
+note. 
 """
 
 from argparse import ArgumentParser
@@ -18,12 +37,9 @@ from utils import convert_one_hot_vector_events_to_event_key_labels, \
 from whole_segment_key_accuracy_computer import WholeSegmentKeyAccuracyComputer
 
 class ClearKeySegmentResultsComputer:
-    """ Compute the results included in Table 6.1 of thesis for key
-    segments generated using one of the 9 clear key segment definitions
-    (Accuracy w.r.t. true boundaries [TB] and system boundaries [SB];
-    Precision and Recall with respect to the ground truth C-KS;
-    Recall with respect to the complete piece; Coverage is the
-    proportion of a complete piece covered by predicted C-KS).
+    """ Used to compute all results on the clear key segments.
+    This includes the results provided in Tables 6.1, 6.3, 6.5,
+    and 6.7 in the thesis.
     """
 
     def __init__(self, song_event_key_preds_dict, ground_truth_key_labels_dict,
@@ -62,9 +78,15 @@ class ClearKeySegmentResultsComputer:
 
         self.verbose = verbose
 
-    def compute_results(self):
-        """ Compute the results included in Table 6.1 of thesis for key
-        segments generated using one of the 9 clear key segment definitions.
+    def compute_clear_key_segment_results(self):
+        """ Compute the results in Table 6.1 of thesis.
+
+        Table 6.1 - Clear key segments (C-KS) results and statistics
+        (%): Accuracy with respect to true boundaries (TB) and system
+        boundaries (SB); Precision and Recall with respect to the
+        ground truth C-KS; Recall with respect to the complete piece;
+        Coverage is the proportion of a complete piece covered by
+        predicted C-KS.
         """
         print("True boundaries accuracy:")
         ground_truth_event_key_acc_computer = EventKeyAccuracyComputer(self.song_event_key_pred_labels_dict,
@@ -78,6 +100,7 @@ class ClearKeySegmentResultsComputer:
                                                                     self.ground_truth_key_labels_dict,
                                                                     self.pred_key_segment_boundaries_dict,
                                                                     verbose=self.verbose)
+       
         num_correctly_predicted_events, \
         num_events_in_predicted_segments = predicted_event_key_acc_computer.compute_event_level_key_accuracy_for_all_songs()
 
@@ -89,16 +112,31 @@ class ClearKeySegmentResultsComputer:
                                                                               self.verbose)
         clear_key_precision_recall_computer.compute_precision_and_recall_for_all_songs()
 
-        print("Fragmentation results:")
-        fragmentation_computer = FragmentationComputer(self.pred_key_segment_boundaries_dict)
-        fragmentation_computer.compute_and_output_avg_segment_len()
-
-        print("\nComplete piece recall and coverage:")
+        print("Complete piece recall and coverage:")
         complete_piece_recall_coverage_computer = CompletePieceRecallCoverageComputer(num_correctly_predicted_events,
                                                                                       num_events_in_predicted_segments,
                                                                                       self.ground_truth_key_labels_dict)
         complete_piece_recall_coverage_computer.compute_and_output_recall_and_coverage()
 
+    def compute_fragmentation_for_clear_key_segments(self):
+        """ Compute the results in Table 6.3 of thesis.
+
+        Table 6.3 - Fragmentation computed for C-KS: Average Segment
+        Length of C-KS; total number of Segment Events in C-KS; total
+        number of C-KS Segments. Each event is the length of an eighth
+        note.
+        """
+        fragmentation_computer = FragmentationComputer(self.pred_key_segment_boundaries_dict)
+        fragmentation_computer.compute_and_output_avg_segment_len()
+
+    def compute_whole_key_segment_results(self):
+        """ Compute the results in Table 6.5 of thesis.
+
+        Table 6.5 - Results for Whole Clear Key Segments (WC-KS): Whole
+        Segment Accuracy; Whole Segment Event-Level Accuracy. Extracted
+        segment is correct if the key labels for all events in the
+        segment are correct. 
+        """
         if self.pred_key_segment_boundaries_dict is None:
             self.pred_key_segment_boundaries_dict = self.get_pred_key_segment_boundaries_dict_for_all_events() 
 
@@ -106,7 +144,23 @@ class ClearKeySegmentResultsComputer:
                                                                          self.ground_truth_key_labels_dict,
                                                                          self.pred_key_segment_boundaries_dict,
                                                                          self.verbose)
+
         whole_segment_key_acc_computer.compute_whole_segment_key_accuracies_for_all_songs()
+
+    def compute_fragmentation_for_whole_key_segments(self):
+        """ Compute the results in Table 6.7 of thesis.
+
+        Table 6.7 - Fragmentation computed for WC-KS: Average Segment
+        Length of WC-KS; total number of Segment Events in WC-KS; total
+        number of WC-KS Segments. Each event is the length of an eighth
+        note. 
+        """
+        print("Whole key segments fragmentation results:")
+        whole_segment_key_acc_computer = WholeSegmentKeyAccuracyComputer(self.song_event_key_pred_labels_dict,
+                                                                         self.ground_truth_key_labels_dict,
+                                                                         self.pred_key_segment_boundaries_dict,
+                                                                         self.verbose)
+        whole_segment_key_acc_computer.compute_whole_segment_key_accuracies_for_all_songs(verbose=False)
         whole_segment_key_acc_computer.compute_fragmentation_for_all_songs()
 
     def get_pred_key_segment_boundaries_dict_for_all_events(self):
@@ -145,6 +199,12 @@ def get_commandline_args():
                         help='Path to .npz file containing the indices of '
                               'the events that should be included in each '
                               'ground truth clear key segment.')
+    parser.add_argument('--table', type=str,
+                        choices=["6.1", "6.3", "6.5", "6.7"],
+                        help="Table 6.1 - Clear key segments (C-KS) results and statistics.\n"
+                             "Table 6.3 - Fragmentation computed for C-KS.\n"
+                             "Table 6.5 - Results for Whole Clear Key Segments (WC-KS).\n"
+                             "Table 6.7 - Fragmentation computed for WC-KS.")
     commandline_args = parser.parse_args()
 
     return commandline_args
@@ -171,4 +231,11 @@ if __name__ == '__main__':
                                                                         ground_truth_key_labels_dict,
                                                                         pred_key_segment_boundaries_dict,
                                                                         ground_truth_key_segment_boundaries_dict)
-    clear_key_segment_results_computer.compute_results()
+    if args.table == "6.1":
+        clear_key_segment_results_computer.compute_clear_key_segment_results()
+    elif args.table == "6.3":
+        clear_key_segment_results_computer.compute_fragmentation_for_clear_key_segments()
+    elif args.table == "6.5":
+        clear_key_segment_results_computer.compute_whole_key_segment_results()
+    elif args.table == "6.7":
+        clear_key_segment_results_computer.compute_fragmentation_for_whole_key_segments()
