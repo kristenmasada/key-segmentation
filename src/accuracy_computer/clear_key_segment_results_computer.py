@@ -211,7 +211,7 @@ def get_commandline_args():
 
 if __name__ == '__main__':
     args = get_commandline_args()
-    print(args)
+    #print(args)
 
     npz_file_handler = NpzFileHandler()
     song_event_key_preds_dict = npz_file_handler.read_npz_file(args.event_key_preds_npz_path)

@@ -7,7 +7,7 @@ whole segment event-level, recall, etc.).
 from argparse import ArgumentParser
 
 from file_handlers import NpzFileHandler
-from thresholded_micchi_model import ThresholdedMicchiModel
+from thresholded_key_segment_results_computer import ThresholdedKeySegmentResultsComputer
 from utils import convert_event_key_probs_to_event_key_labels, \
                   remove_songs_to_ignore_from_dict
 from whole_segment_key_accuracy_computer import WholeSegmentKeyAccuracyComputer
@@ -104,7 +104,7 @@ def get_t_ks_whole_key_segment_stats_computer(song_event_key_probs_dict, song_ev
     ground_truth_key_labels_dict : dict of { str : np.ndarray }
     threshold : float 
     """
-    thresholded_micchi_model = ThresholdedMicchiModel(song_event_key_probs_dict, ground_truth_key_labels_dict,
+    thresholded_micchi_model = ThresholdedKeySegmentResultsComputer(song_event_key_probs_dict, ground_truth_key_labels_dict,
                                                       threshold=threshold)
     thresholded_model_key_segments_dict = thresholded_micchi_model.get_key_segments_dict()
 

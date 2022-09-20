@@ -22,7 +22,7 @@ cd src/accuracy_computer
 ##### Recreate Table 6.2 (Thresholded Frog Model) Results:
 ```
 cd src/accuracy_computer
-./thresholded_micchi_model.sh
+./thresholded_key_segment_results_computer.sh
 ```
 
 ##### Recreate Tables 6.3 and 6.4 (Fragmentation) Results:
@@ -33,7 +33,7 @@ cd src/accuracy_computer
 ./clear_key_segment_fragmentation_computer.sh
 
 # Table 6.4:
-./thresholded_micchi_model.sh
+./thresholded_key_segment_fragmentation_computer.sh
 ```
 
 ##### Recreate Tables 6.5-6.8 (Whole Key Segment) Results:
@@ -42,13 +42,13 @@ cd src/accuracy_computer
 ./whole_clear_key_segment_results_computer.sh
 
 # Tables 6.6:
-./thresholded_micchi_model.sh
+./whole_thresholded_key_segment_results_computer.sh
 
 # Table 6.7:
 ./whole_clear_key_segment_fragmentation_computer.sh
 
 # Table 6.8:
-./thresholded_micchi_model.sh
+./whole_thresholded_key_segment_fragmentation_computer.sh
 ```
 
 ##### Recreate Clear Thresholded Key Segment Precision and Recall Plots in Figures 6.1-6.6:

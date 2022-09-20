@@ -1,5 +1,28 @@
-""" Get thresholded key segments and compute accuracy
-statistics over these.
+""" Used to compute all results on the thresholded key segments.
+This includes the results provided in Tables 6.2, 6.4, 6.6,
+and 6.8 in the thesis.
+
+Table 6.2 - Thresholded key segments (T-KS) results and statistics
+(%): C-KS Coverage, System Boundaries (SB) Accuracy, and Complete
+Piece (CP) Recall referenced from Table 6.1; Threshold used to
+compute thresholded Frog results; Coverage of thresholded Frog
+model using Threshold; SB Accuracy computed with Threshold; CP
+Recall computed with Threshold with respect to the complete piece.
+
+Table 6.4 - Fragmentation computed for T-KS: Threshold used to
+compute thresholded Frog results; Average Segment Length of T-KS;
+total number of Segment Events in T-KS; total number of T-KS
+Segments. Each event is the length of an eighth note.
+
+Table 6.6 - Results for Whole Thresholded Key Segments (WT-KS):
+Whole Segment Accuracy; Whole Segment Event-Level Accuracy.
+Extracted segment is correct if the key labels for all events
+in the segment are correct.
+
+Table 6.8 - Fragmentation computed for WT-KS: Average Segment
+Length of WT-KS; total number of Segment Events in WT-KS; total
+number of WT-KS Segments. Each event is the length of an eighth
+note.
 """
 
 from argparse import ArgumentParser
@@ -14,9 +37,10 @@ from utils import get_consecutive_groups_of_indices, \
                   truncate_song_event_key_probs_one_event_longer_than_ground_truth_labels
 from whole_segment_key_accuracy_computer import WholeSegmentKeyAccuracyComputer
 
-class ThresholdedMicchiModel:
-    """ Get thresholded key segments and compute accuracy
-    statistics over these.
+class ThresholdedKeySegmentResultsComputer:
+    """ Used to compute all results on the thresholded key segments.
+    This includes the results provided in Tables 6.2, 6.4, 6.6,
+    and 6.8 in the thesis.
     """
 
     def __init__(self, event_key_probs_dict, ground_truth_key_labels_dict,
@@ -102,7 +126,7 @@ class ThresholdedMicchiModel:
         """
         coverage, num_predicted_events, total_num_events = self.compute_coverage()
 
-        print("Coverage (threshold = {:.3f}): {:.2f}% ({}/{})".format(self.threshold,
+        print("Coverage (threshold = {:.3f}): {:.1f}% ({}/{})".format(self.threshold,
                                                                       coverage,
                                                                       num_predicted_events,
                                                                       total_num_events))
@@ -142,8 +166,8 @@ class ThresholdedMicchiModel:
         """
         accuracy, recall, num_correctly_predicted_events, num_predicted_events, total_num_events = self.compute_accuracy_and_recall()
 
-        print("Accuracy: {:.2f}% ({}/{})".format(accuracy, num_correctly_predicted_events, num_predicted_events))
-        print("Recall: {:.2f}% ({}/{})".format(recall, num_correctly_predicted_events, total_num_events))
+        print("Accuracy: {:.1f}% ({}/{})".format(accuracy, num_correctly_predicted_events, num_predicted_events))
+        print("Recall: {:.1f}% ({}/{})".format(recall, num_correctly_predicted_events, total_num_events))
 
         return accuracy
 
@@ -218,6 +242,12 @@ def get_commandline_args():
                         help='Path to .npz file containing the ground '
                              'truth key labels for the same songs as '
                              '`--event_key_probs_npz_path`.')
+    parser.add_argument('--table', type=str,
+                        choices=["6.2", "6.4", "6.6", "6.8"],
+                        help="Table 6.2 - Thresholded key segments (T-KS) results and statistics.\n"
+                             "Table 6.4 - Fragmentation computed for T-KS.\n"
+                             "Table 6.6 - Results for Whole Thresholded Key Segments (WT-KS).\n"
+                             "Table 6.8 - Fragmentation computed for WT-KS.")
 
     commandline_args = parser.parse_args()
 
@@ -230,7 +260,7 @@ def compute_accuracy_and_coverage_for_all_thresholds(thresholded_micchi_model,
 
     Parameters
     ----------
-    thresholded_micchi_model : ThresholdedMicchiModel
+    thresholded_micchi_model : ThresholdedKeySegmentResultsComputer
     thresholds : list of float
     """
     print("Accuracy and Coverage:")
@@ -254,7 +284,7 @@ def compute_fragmentation_for_all_thresholds(thresholded_micchi_model,
 
     Parameters
     ----------
-    thresholded_micchi_model : ThresholdedMicchiModel
+    thresholded_micchi_model : ThresholdedKeySegmentResultsComputer
     thresholds : list of float
     """
     print("\nFragmentation:")
@@ -274,7 +304,7 @@ def compute_whole_key_segment_acc_for_all_thresholds(thresholded_micchi_model,
 
     Parameters
     ----------
-    thresholded_micchi_model : ThresholdedMicchiModel
+    thresholded_micchi_model : ThresholdedKeySegmentResultsComputer
     thresholds : list of float 
     """
     for threshold in thresholds:
@@ -288,6 +318,28 @@ def compute_whole_key_segment_acc_for_all_thresholds(thresholded_micchi_model,
                                                                          key_segments_dict)
 
         whole_segment_key_acc_computer.compute_whole_segment_key_accuracies_for_all_songs()
+
+def compute_whole_key_segment_fragmentation_for_all_thresholds(thresholded_micchi_model,
+                                                               thresholds):
+    """ Compute whole segment fragmentation for thresholded key segments
+    using each threshold value.
+
+    Parameters
+    ----------
+    thresholded_micchi_model : ThresholdedKeySegmentResultsComputer
+    thresholds : list of float 
+    """
+    for threshold in thresholds:
+        thresholded_micchi_model.update_threshold(threshold)
+        print("Threshold:", threshold)
+
+        key_segments_dict = thresholded_micchi_model.get_key_segments_dict()
+
+        whole_segment_key_acc_computer = WholeSegmentKeyAccuracyComputer(thresholded_micchi_model.event_key_preds_dict,
+                                                                         thresholded_micchi_model.ground_truth_key_labels_dict,
+                                                                         key_segments_dict)
+
+        whole_segment_key_acc_computer.compute_whole_segment_key_accuracies_for_all_songs(verbose=False)
         whole_segment_key_acc_computer.compute_fragmentation_for_all_songs()
 
 if __name__ == '__main__':
@@ -298,14 +350,19 @@ if __name__ == '__main__':
     event_key_probs_dict = npz_file_handler.read_npz_file(args.event_key_probs_npz_path)
     ground_truth_key_labels_dict = npz_file_handler.read_npz_file(args.ground_truth_key_labels_npz_path)
 
-    thresholds = [0.98, 0.89, 0.875, 0.87, 0.865, 0.825, 0.81, 0.51, 0.17] #list(np.arange(0.1, 1.0, 0.005))
-    thresholded_micchi_model = ThresholdedMicchiModel(event_key_probs_dict, ground_truth_key_labels_dict)
+    thresholds = [0.98, 0.89, 0.875, 0.87, 0.865, 0.825, 0.81, 0.51, 0.17]
+    thresholded_micchi_model = ThresholdedKeySegmentResultsComputer(event_key_probs_dict,
+                                                                    ground_truth_key_labels_dict)
 
-    compute_accuracy_and_coverage_for_all_thresholds(thresholded_micchi_model,
-                                                     thresholds)
-
-    compute_fragmentation_for_all_thresholds(thresholded_micchi_model,
-                                             thresholds)
-
-    compute_whole_key_segment_acc_for_all_thresholds(thresholded_micchi_model,
-                                                     thresholds)
+    if args.table == "6.2":
+        compute_accuracy_and_coverage_for_all_thresholds(thresholded_micchi_model,
+                                                         thresholds)
+    elif args.table == "6.4":
+        compute_fragmentation_for_all_thresholds(thresholded_micchi_model,
+                                                 thresholds)
+    elif args.table == "6.6":
+        compute_whole_key_segment_acc_for_all_thresholds(thresholded_micchi_model,
+                                                         thresholds)
+    elif args.table == "6.8":
+        compute_whole_key_segment_fragmentation_for_all_thresholds(thresholded_micchi_model,
+                                                                   thresholds)
