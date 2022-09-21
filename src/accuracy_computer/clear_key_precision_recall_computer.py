@@ -9,7 +9,7 @@ import numpy as np
 from file_handlers import NpzFileHandler
 from utils import convert_key_indices_to_excluded_events_vector, \
                   exclude_specified_events_from_event_key_labels, \
-                  truncate_song_event_key_probs_one_event_longer_than_ground_truth_labels 
+                  truncate_song_event_key_probs_one_event_longer_than_ground_truth_labels
 
 class SongClearKeyPrecisionRecallComputer:
     """ Compute the clear key precision and recall for one song.
@@ -41,7 +41,7 @@ class SongClearKeyPrecisionRecallComputer:
 
         num_events = self.ground_truth_event_key_labels.shape[0]
         ground_truth_key_segment_excluded_events = convert_key_indices_to_excluded_events_vector(ground_truth_key_segment_indices,
-                                                                                                 num_events) 
+                                                                                                 num_events)
         predicted_key_segment_excluded_events = convert_key_indices_to_excluded_events_vector(predicted_key_segment_indices,
                                                                                               num_events)
 
@@ -76,7 +76,7 @@ class SongClearKeyPrecisionRecallComputer:
         and recall.
         """
         num_correct_pred_events_in_gt_segments = np.sum(self.overlapping_ground_truth_event_key_labels == self.overlapping_event_key_predictions)
-        total_num_pred_events = np.sum(self.predicted_key_segment_included_events) 
+        total_num_pred_events = np.sum(self.predicted_key_segment_included_events)
         total_num_gt_events = np.sum(self.ground_truth_key_segment_included_events)
         return num_correct_pred_events_in_gt_segments, total_num_pred_events, total_num_gt_events
 
@@ -94,7 +94,7 @@ class SongClearKeyPrecisionRecallComputer:
         ----------
         num_correct_pred_events_in_gt_segments : int
         total_num_pred_events : int
-        total_num_gt_events : int 
+        total_num_gt_events : int
         """
         if total_num_pred_events == 0:
             song_precision = 0
@@ -117,7 +117,7 @@ class SongClearKeyPrecisionRecallComputer:
 
         return song_precision, song_recall
 
-class ClearKeyPrecisionRecallComputer:    
+class ClearKeyPrecisionRecallComputer:
     """ Compute the clear key precision and recall for each song.
     Also compute and output the overall clear key precision and recall.
     """
@@ -141,8 +141,8 @@ class ClearKeyPrecisionRecallComputer:
 
         self.ground_truth_key_labels_dict = ground_truth_key_labels_dict
 
-        self.ground_truth_key_segment_excluded_events = ground_truth_key_segment_excluded_events 
-        self.predicted_key_segment_excluded_events = predicted_key_segment_excluded_events 
+        self.ground_truth_key_segment_excluded_events = ground_truth_key_segment_excluded_events
+        self.predicted_key_segment_excluded_events = predicted_key_segment_excluded_events
 
         self.overall_num_correct_pred_events_in_gt_segments = 0
         self.overall_total_num_pred_events = 0
@@ -153,7 +153,7 @@ class ClearKeyPrecisionRecallComputer:
     def compute_precision_and_recall_for_each_song(self):
         """ Compute the clear key precision and recall for each song.
         """
-        for songname in self.song_event_key_preds_dict: 
+        for songname in self.song_event_key_preds_dict:
             if self.verbose:
                 print("Song:", songname)
 
@@ -176,7 +176,7 @@ class ClearKeyPrecisionRecallComputer:
                                                                                             total_num_pred_events,
                                                                                             total_num_gt_events)
 
-            self.overall_num_correct_pred_events_in_gt_segments += num_correct_pred_events_in_gt_segments 
+            self.overall_num_correct_pred_events_in_gt_segments += num_correct_pred_events_in_gt_segments
             self.overall_total_num_pred_events += total_num_pred_events
             self.overall_total_num_gt_events += total_num_gt_events
 
@@ -196,7 +196,7 @@ class ClearKeyPrecisionRecallComputer:
         print()
 
 def get_commandline_args():
-    """ Get commandline argument values from user. 
+    """ Get commandline argument values from user.
     """
     parser = ArgumentParser(description='Compute the clear key precision and recall for each song. '
                                         'Also compute these for all songs overall.')

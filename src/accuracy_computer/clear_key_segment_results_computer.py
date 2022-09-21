@@ -17,12 +17,12 @@ note.
 Table 6.5 - Results for Whole Clear Key Segments (WC-KS): Whole
 Segment Accuracy; Whole Segment Event-Level Accuracy. Extracted
 segment is correct if the key labels for all events in the
-segment are correct. 
+segment are correct.
 
 Table 6.7 - Fragmentation computed for WC-KS: Average Segment
 Length of WC-KS; total number of Segment Events in WC-KS; total
 number of WC-KS Segments. Each event is the length of an eighth
-note. 
+note.
 """
 
 from argparse import ArgumentParser
@@ -69,7 +69,7 @@ class ClearKeySegmentResultsComputer:
         if pred_key_segment_boundaries_dict is not None:
             self.pred_key_segment_boundaries_dict = remove_songs_to_ignore_from_dict(self.songs_to_ignore, pred_key_segment_boundaries_dict)
         else:
-            self.pred_key_segment_boundaries_dict = None 
+            self.pred_key_segment_boundaries_dict = None
 
         if ground_truth_key_segment_boundaries_dict is not None:
             self.ground_truth_key_segment_boundaries_dict = remove_songs_to_ignore_from_dict(self.songs_to_ignore, ground_truth_key_segment_boundaries_dict)
@@ -100,23 +100,52 @@ class ClearKeySegmentResultsComputer:
                                                                     self.ground_truth_key_labels_dict,
                                                                     self.pred_key_segment_boundaries_dict,
                                                                     verbose=self.verbose)
-       
+
         num_correctly_predicted_events, \
         num_events_in_predicted_segments = predicted_event_key_acc_computer.compute_event_level_key_accuracy_for_all_songs()
 
         print("Clear key segments precision and recall:")
-        clear_key_precision_recall_computer = ClearKeyPrecisionRecallComputer(self.song_event_key_pred_labels_dict,
-                                                                              self.ground_truth_key_labels_dict,
-                                                                              self.ground_truth_key_segment_boundaries_dict,
-                                                                              self.pred_key_segment_boundaries_dict,
-                                                                              self.verbose)
-        clear_key_precision_recall_computer.compute_precision_and_recall_for_all_songs()
+        if self.check_if_computing_def9_results():
+            self.compute_def9_precision_and_recall(num_correctly_predicted_events, num_events_in_predicted_segments)
+        else:
+            clear_key_precision_recall_computer = ClearKeyPrecisionRecallComputer(self.song_event_key_pred_labels_dict,
+                                                                                  self.ground_truth_key_labels_dict,
+                                                                                  self.ground_truth_key_segment_boundaries_dict,
+                                                                                  self.pred_key_segment_boundaries_dict,
+                                                                                  self.verbose)
+            clear_key_precision_recall_computer.compute_precision_and_recall_for_all_songs()
 
         print("Complete piece recall and coverage:")
         complete_piece_recall_coverage_computer = CompletePieceRecallCoverageComputer(num_correctly_predicted_events,
                                                                                       num_events_in_predicted_segments,
                                                                                       self.ground_truth_key_labels_dict)
         complete_piece_recall_coverage_computer.compute_and_output_recall_and_coverage()
+
+    def check_if_computing_def9_results(self):
+        """ If both key segment boundaries dictionaries are empty,
+        this means we are computing the precision and recall for
+        key segment definition 9, where a clear key segment is the
+        complete musical input.
+        """
+        return (self.ground_truth_key_segment_boundaries_dict is None
+                and self.pred_key_segment_boundaries_dict is None)
+
+    def compute_def9_precision_and_recall(self, num_correctly_predicted_events, num_events_in_predicted_segments):
+        """ If computing the results for key segment def. 9,
+        compute the precision and recall in the same way as
+        the event-level system boundaries key accuracy.
+
+        Parameters
+        ----------
+        num_correctly_predicted_events : int
+        num_events_in_predicted_segments : int
+        """
+        all_events_precision = (num_correctly_predicted_events / num_events_in_predicted_segments) * 100.0
+        all_events_recall = all_events_precision
+        print("Overall precision {:.1f}% ({}/{})".format(all_events_precision, num_correctly_predicted_events,
+                                                         num_events_in_predicted_segments))
+        print("Overall recall {:.1f}% ({}/{})\n".format(all_events_recall, num_correctly_predicted_events,
+                                                        num_events_in_predicted_segments))
 
     def compute_fragmentation_for_clear_key_segments(self):
         """ Compute the results in Table 6.3 of thesis.
@@ -126,6 +155,9 @@ class ClearKeySegmentResultsComputer:
         number of C-KS Segments. Each event is the length of an eighth
         note.
         """
+        if self.pred_key_segment_boundaries_dict is None:
+            self.pred_key_segment_boundaries_dict = self.get_pred_key_segment_boundaries_dict_for_all_events()
+
         fragmentation_computer = FragmentationComputer(self.pred_key_segment_boundaries_dict)
         fragmentation_computer.compute_and_output_avg_segment_len()
 
@@ -135,10 +167,10 @@ class ClearKeySegmentResultsComputer:
         Table 6.5 - Results for Whole Clear Key Segments (WC-KS): Whole
         Segment Accuracy; Whole Segment Event-Level Accuracy. Extracted
         segment is correct if the key labels for all events in the
-        segment are correct. 
+        segment are correct.
         """
         if self.pred_key_segment_boundaries_dict is None:
-            self.pred_key_segment_boundaries_dict = self.get_pred_key_segment_boundaries_dict_for_all_events() 
+            self.pred_key_segment_boundaries_dict = self.get_pred_key_segment_boundaries_dict_for_all_events()
 
         whole_segment_key_acc_computer = WholeSegmentKeyAccuracyComputer(self.song_event_key_pred_labels_dict,
                                                                          self.ground_truth_key_labels_dict,
@@ -153,9 +185,13 @@ class ClearKeySegmentResultsComputer:
         Table 6.7 - Fragmentation computed for WC-KS: Average Segment
         Length of WC-KS; total number of Segment Events in WC-KS; total
         number of WC-KS Segments. Each event is the length of an eighth
-        note. 
+        note.
         """
         print("Whole key segments fragmentation results:")
+
+        if self.pred_key_segment_boundaries_dict is None:
+            self.pred_key_segment_boundaries_dict = self.get_pred_key_segment_boundaries_dict_for_all_events()
+
         whole_segment_key_acc_computer = WholeSegmentKeyAccuracyComputer(self.song_event_key_pred_labels_dict,
                                                                          self.ground_truth_key_labels_dict,
                                                                          self.pred_key_segment_boundaries_dict,
@@ -172,9 +208,10 @@ class ClearKeySegmentResultsComputer:
         in the song).
         """
         pred_key_segment_boundaries_dict = {}
+
         for songname in self.ground_truth_key_labels_dict:
-            gt_key_labels = self.ground_truth_key_labels_dict[songname]
-            num_song_events = gt_key_labels.shape[0] 
+            pred_key_labels = self.ground_truth_key_labels_dict[songname]
+            num_song_events = pred_key_labels.shape[0]
             pred_key_segment_boundaries_dict[songname] = [[0, num_song_events]]
 
         return pred_key_segment_boundaries_dict

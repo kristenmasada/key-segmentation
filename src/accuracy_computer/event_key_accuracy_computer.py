@@ -72,7 +72,7 @@ class SongEventKeyAccuracyComputer:
 
         return event_level_accuracy
 
-class EventKeyAccuracyComputer:    
+class EventKeyAccuracyComputer:
     """ Compute the event-level key accuracy for all songs.
     """
 
@@ -114,7 +114,7 @@ class EventKeyAccuracyComputer:
     def compute_event_level_key_accuracy_for_each_song(self):
         """ Compute the event-level key accuracy for each song.
         """
-        for songname in self.song_event_key_preds_dict: 
+        for songname in self.song_event_key_preds_dict:
 
             if self.verbose:
                 print("Song:", songname)
@@ -156,7 +156,7 @@ class EventKeyAccuracyComputer:
                                                                     self.overall_total_num_events))
         print()
 
-        return self.overall_num_correct_events, self.overall_total_num_events 
+        return self.overall_num_correct_events, self.overall_total_num_events
 
 def get_commandline_args():
     """ Get commandline argument values from user.

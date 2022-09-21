@@ -26,7 +26,7 @@ class FragmentationComputer:
             Threshold value used to generate the key segments provided
             in `key_segments_dict`.
             If the value passed in is -1.0, this means that no threshold
-            was used to generate the key segments. 
+            was used to generate the key segments.
             *I just output the threshold value. The threshold doesn't have
             any impact on the fragmentation computations.
         """
@@ -88,7 +88,7 @@ class FragmentationComputer:
                 else:
                     segment_length_to_frequency_dict[key_segment_length] = 1
 
-        return segment_length_to_frequency_dict 
+        return segment_length_to_frequency_dict
 
 class SegmentLengthToFrequencyPlotter:
     """ Extra class that can be used to plot the segment length vs. the
@@ -112,7 +112,7 @@ class SegmentLengthToFrequencyPlotter:
         self.max_segment_frequency = max(self.segment_length_frequencies)
 
         self.threshold = threshold
-        
+
     def plot_segment_length_to_frequency_scatter(self):
         """ Plot segment lengths vs. frequencies of each segment length
         as a scatter plot.
