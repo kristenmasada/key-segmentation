@@ -1,0 +1,19 @@
+{
+  "input_type": "pitch_bass",
+  "output_mode": "legacy",
+  "output labels and size": {
+    "key": 24,
+    "tonicisation": 21,
+    "degree": 21,
+    "quality": 10,
+    "inversion": 4,
+    "root": 12
+  },
+  "beat strength": true,
+  "files per dataset": {
+    "train": 290,
+    "valid": 73,
+    "test": 0
+  },
+  "compression": "ZLIB"
+}
