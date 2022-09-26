@@ -1,0 +1,2 @@
+#python3 -m scripts.cra_preprocess pitch_bass -f 'data/' -o 'legacy'
+python3 -m scripts.cra_preprocess pitch_bass -if '../../data/meta-corpus_split/' -of 'data/' -o 'legacy' --data_presplit --chords_folder "strict_key_segment_annotator_chords" --use_ambiguous_label
