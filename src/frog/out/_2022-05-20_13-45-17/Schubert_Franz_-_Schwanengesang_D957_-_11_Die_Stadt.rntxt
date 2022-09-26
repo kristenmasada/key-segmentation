@@ -1,0 +1,28 @@
+
+Time Signature : 3/4
+
+m1 c: i
+m3 b1.5 viio42 b2 viio7/V
+m6 b2 i
+m8 V b3 iv6 b3.5 iv
+m9 iv64 b3 V7/IV
+m10 iv
+m11 b3 iiø65 b3.5 iio6
+m12 V b1.5 i64 b2 V b3 i
+m13 i64 b3 V
+m14 i
+m16 viio42 b2 viio42/V b2.5 viio7/V b3 viio42/V b3.5 viio7/V
+m19 b1.5 g: viio42 b3.5 c: viio7/V
+m20 g: viio42
+m21 b3.5 c: viio7/V
+m24 b1.5 g: viio42
+m25 c: viio7/V
+m27 b3 i
+m29 V7 b2 V b3 iv6 b3.5 iv
+m30 iv64 b3 f: V7
+m31 i b1.5 c: iv b2 f: i b2.5 c: iv b3 f: i
+m32 c: iv6 b2 bII6
+m33 V b1.5 i64 b2 V b3 i64
+m34 b3 V
+m35 i
+m37 viio7/V b1.5 viio42/V b2.5 viio7/V

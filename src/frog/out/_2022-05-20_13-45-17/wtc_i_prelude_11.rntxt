@@ -1,0 +1,21 @@
+
+Time Signature : 12/8
+
+m1 F: I b2 I6 b2.33 V7/IV b3 IV b4.33 I
+m2 V42 b2 V43 b2.33 V65 b2.67 V43 b3 I
+m3 viio7/V b1.33 viio6/V b2 V7/V b2.33 viio6/V b3 V6 b4.33 V65
+m4 viio7/VI b1.33 viio7 b1.67 viio7/VI b2.67 viio6 b3 vi6 b3.33 vi b3.67 vi6 b4.33 I6
+m5 ii7 b1.33 viio6 b2 V65 b3 I b3.33 vi6 b4 IV6 b4.33 ii65
+m6 V65 b2 V65/VI b3 vi b4.33 d: i6 b4.67 F: vi
+m7 ii6 b2 ii b3 viio7 b3.33 d: viio7 b3.67 viio43 b4.33 viio65
+m8 i b4 i6 b4.67 i
+m9 F: viio7/V b2 V65/V b2.33 viio7/V b2.67 V65/V b3.33 V65/VI
+m10 V65/II b1.67 A: V65 b2 g: V65 b2.33 d: viio42/IV b3 V65/IV b3.33 A#: V65/II b4.33 viio65/V
+m11 ii b1.33 viio7 b2 V65 b2.33 V7 b2.67 viio7 b3 I b3.33 vi b4 IV6
+m12 viio6 b1.67 V65/VI b2.33 V7/VI b3 vi b4.67 vi7
+m13 V7/V b2.67 V65/V b3 V7 b3.33 V65 b4.67 V7
+m14 F: IV b2 A#: I b2.33 F: I b2.67 IV b3 ii65 b4.33 ii42
+m15 viio6 b1.67 V42 b3 I6 b4 vi6 b4.33 vi b4.67 I
+m16 ii65 b1.33 V7 b2 V65 b2.33 V7 b3 I
+m17 IV64 b1.33 IV6 b2 IV64 b3 V7
+m18 I b2 IV b2.67 I

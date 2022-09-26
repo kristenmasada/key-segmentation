@@ -15,12 +15,12 @@ class MeasureOnsetFinder:
         self.parsed_mxl_starts_on_measure_zero = False
         self.measure_nums_to_measure_onsets = self.get_measure_nums_to_measure_onsets(parsed_mxl)
         self.total_num_measures = len(self.measure_nums_to_measure_onsets)
-        self.last_measure_num = max(self.measure_nums_to_measure_onsets) 
+        self.last_measure_num = max(self.measure_nums_to_measure_onsets)
 
     def get_measure_nums_to_measure_onsets(self, parsed_mxl):
         """ From the parsed MusicXML, create a dictionary that maps the
         number of each measure to the onset time of that measure.
-        
+
         There are instances where the first measure in a song has
         number 0 instead of 1. If this is the case, shift all of
         the measure numbers by 1 to ensure the first measure has
@@ -50,9 +50,9 @@ class MeasureOnsetFinder:
         for measure_onset, measures_list in measure_onset_map.items():
             first_part_measure = measures_list[0]
             if first_part_measure.numberSuffix is None:
-                measure_nums_to_measure_onsets[first_part_measure.number] = measure_onset 
-            else:
-                print("Warning: measure {} excluded.".format(first_part_measure.number))
+                measure_nums_to_measure_onsets[first_part_measure.number] = measure_onset
+            #else:
+            #    print("Warning: measure {} excluded.".format(first_part_measure.number))
 
         if min(measure_nums_to_measure_onsets) == 0:
             self.parsed_mxl_starts_on_measure_zero = True

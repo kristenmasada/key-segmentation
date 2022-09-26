@@ -6,6 +6,19 @@ import re
 
 import music21 as m21
 
+key_segment_annotator_class_to_def = {'basic_key_segment_annotator': 'def1',
+                                      'thresholded_basic_key_segment_annotator': 'def1',
+                                      'relaxed_key_segment_annotator': 'def3',
+                                      'thresholded_relaxed_key_segment_annotator': 'def3',
+                                      'strict_key_segment_annotator': 'def2',
+                                      'thresholded_strict_key_segment_annotator': 'def2',
+                                      'mixture_key_segment_annotator': 'def5',
+                                      'augmented6th_key_segment_annotator': 'def7',
+                                      'neapolitan_chords_key_segment_annotator': 'def6',
+                                      'chromatic_key_segment_annotator': 'def4',
+                                      'thresholded_chromatic_key_segment_annotator': 'def4',
+                                      'tonicization_key_segment_annotator': 'def8'}
+
 def check_and_make_output_dir(filepath):
     """ Check if directory in `filepath` exists. If not,
     create it.

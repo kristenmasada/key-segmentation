@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 
 from file_handlers import NpzFileHandler
 from key_segment import KeySegment
-from key_segment_indices_writer import KeySegmentIndicesWriter 
+from key_segment_indices_writer import KeySegmentIndicesWriter
 from measure_onset_finder import MeasureOnsetFinder
 from thresholded_basic_key_segment_annotator import ThresholdedBasicKeySegmentAnnotator
 from thresholded_chromatic_key_segment_annotator import ThresholdedChromaticKeySegmentAnnotator
@@ -30,7 +30,7 @@ class ThresholdedMicchiModelKeySegmentAnnotatorAndExporter:
 
         Parameters
         ----------
-        event_key_probs_dict : dict of { str : np.ndarray } 
+        event_key_probs_dict : dict of { str : np.ndarray }
         ground_truth_key_labels_dict : dict of { str : np.ndarray }
         threshold : float
         txt_file_with_mxl_filepaths : str
@@ -63,7 +63,7 @@ class ThresholdedMicchiModelKeySegmentAnnotatorAndExporter:
         Parameters
         ----------
         mxl_filepaths : list of str
-        predicted_rntxt_filepaths_dir : str 
+        predicted_rntxt_filepaths_dir : str
         """
         rntxt_filepaths = []
         for mxl_filepath in mxl_filepaths:
@@ -98,7 +98,7 @@ class ThresholdedMicchiModelKeySegmentAnnotatorAndExporter:
 
         Parameters
         ----------
-        event_key_probs_dict : dict of { str : np.ndarray } 
+        event_key_probs_dict : dict of { str : np.ndarray }
         ground_truth_key_labels_dict : dict of { str : np.ndarray }
         threshold : float
         """
@@ -117,7 +117,7 @@ class ThresholdedMicchiModelKeySegmentAnnotatorAndExporter:
 
             songname = strip_songname_from_path(mxl_filepath)
 
-            song_thresholded_key_segment_indices = self.thresholded_key_segment_indices_dict[songname] 
+            song_thresholded_key_segment_indices = self.thresholded_key_segment_indices_dict[songname]
 
             self.annotate_and_export_key_segments_for_song(mxl_filepath, parsed_mxl, rntxt_analysis,
                                                            song_thresholded_key_segment_indices)
@@ -130,9 +130,9 @@ class ThresholdedMicchiModelKeySegmentAnnotatorAndExporter:
 
         Parameters
         ----------
-        mxl_filepath : str 
+        mxl_filepath : str
         parsed_mxl : music21.stream.Score
-        rntxt_analysis : music21.stream.iterator.RecursiveIterator 
+        rntxt_analysis : music21.stream.iterator.RecursiveIterator
         thresholded_key_segment_indices : list of [int, int]
         """
         measure_onset_finder = MeasureOnsetFinder(parsed_mxl)
@@ -213,7 +213,7 @@ if __name__ == '__main__':
                                                                                                                        ground_truth_key_labels_dict,
                                                                                                                        threshold,
                                                                                                                        txt_file_with_mxl_filepaths,
-                                                                                                                       predicted_rntxt_filepaths_dir, 
+                                                                                                                       predicted_rntxt_filepaths_dir,
                                                                                                                        key_segment_annotator_class,
                                                                                                                        min_key_segment_quarter_length)
 

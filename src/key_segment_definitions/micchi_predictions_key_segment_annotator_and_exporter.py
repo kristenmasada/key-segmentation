@@ -8,7 +8,7 @@ from augmented_6th_key_segment_annotator import Augmented6thKeySegmentAnnotator
 from basic_key_segment_annotator import BasicKeySegmentAnnotator
 from chromatic_key_segment_annotator import ChromaticKeySegmentAnnotator
 from excluded_events_writer import ExcludedEventsWriter
-from key_segment_exporter import KeySegmentExporter 
+from key_segment_exporter import KeySegmentExporter
 from key_segment_indices_writer import KeySegmentIndicesWriter
 from measure_onset_finder import MeasureOnsetFinder
 from mixture_key_segment_annotator import MixtureKeySegmentAnnotator
@@ -49,7 +49,7 @@ class MicchiPredictionsKeySegmentAnnotatorAndExporter:
 
         self.min_key_segment_quarter_length = min_key_segment_quarter_length
 
-        self.output_method = output_method 
+        self.output_method = output_method
 
         if self.output_method == "output_events_to_exclude":
             self.excluded_events_writer = ExcludedEventsWriter(key_segment_annotator_class,
@@ -67,7 +67,7 @@ class MicchiPredictionsKeySegmentAnnotatorAndExporter:
         Parameters
         ----------
         mxl_filepaths : list of str
-        predicted_rntxt_filepaths_dir : str 
+        predicted_rntxt_filepaths_dir : str
         """
         rntxt_filepaths = []
         for mxl_filepath in mxl_filepaths:
@@ -102,9 +102,9 @@ class MicchiPredictionsKeySegmentAnnotatorAndExporter:
 
         Parameters
         ----------
-        mxl_filepath : str 
+        mxl_filepath : str
         parsed_mxl : music21.stream.Score
-        rntxt_analysis : music21.stream.iterator.RecursiveIterator 
+        rntxt_analysis : music21.stream.iterator.RecursiveIterator
         """
         measure_onset_finder = MeasureOnsetFinder(parsed_mxl)
 

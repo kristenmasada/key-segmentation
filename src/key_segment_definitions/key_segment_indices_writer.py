@@ -1,13 +1,15 @@
 """ Output the clear key segments to an Npz file in the
 format of a list of eighth note beat indices indicating
 the start and stop time of each key segment (NOTE: stop
-index is exclusive). 
+index is exclusive).
 """
 
 import numpy as np
 
 from file_handlers import NpzFileHandler
-from utils import convert_camel_case_to_snake_case, strip_songname_from_path
+from utils import convert_camel_case_to_snake_case, \
+                  key_segment_annotator_class_to_def, \
+                  strip_songname_from_path
 
 class KeySegmentIndicesWriter:
     """ Output the clear key segments to an Npz file in the
@@ -51,22 +53,23 @@ class KeySegmentIndicesWriter:
         allow_root_position_viio_chords : bool
         thresholded : bool
         """
-        output_npz_filename = "out/"
+        output_npz_filename = "out/meta-corpus_validation_"
 
         if thresholded:
-            output_npz_filename += "thresholded_"
-        
-        output_npz_filename += "micchi2021_"
+            output_npz_filename += "thresholded_pred_"
+        elif micchi_predictions:
+            output_npz_filename += "pred_"
+        else:
+            output_npz_filename += "ground_truth_"
 
-        if micchi_predictions:
-            output_npz_filename += "predicted_"
-            
-        output_npz_filename += key_segment_annotator_class
+        output_npz_filename += "key_segment_boundaries_"
+
+        output_npz_filename += key_segment_annotator_class_to_def[key_segment_annotator_class]
 
         if allow_root_position_viio_chords:
-            output_npz_filename += "_allow_root_pos_viio"
+            output_npz_filename += "v2"
 
-        output_npz_filename += "_validation_key_segment_indices.npz"
+        output_npz_filename += ".npz"
 
         return output_npz_filename
 
@@ -80,7 +83,7 @@ class KeySegmentIndicesWriter:
         mxl_filepath : str
         """
         songname = strip_songname_from_path(mxl_filepath)
-        
+
         song_key_segment_indices = []
 
         for key_segment in key_segments:

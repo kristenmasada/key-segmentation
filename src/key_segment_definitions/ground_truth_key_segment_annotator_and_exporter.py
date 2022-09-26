@@ -8,10 +8,9 @@ from argparse import ArgumentParser
 from augmented_6th_key_segment_annotator import Augmented6thKeySegmentAnnotator
 from basic_key_segment_annotator import BasicKeySegmentAnnotator
 from chromatic_key_segment_annotator import ChromaticKeySegmentAnnotator
-from csv_file_modifier import CSVFileModifier
 from excluded_events_writer import ExcludedEventsWriter
-from key_segment_exporter import KeySegmentExporter 
-from key_segment_indices_writer import KeySegmentIndicesWriter 
+from key_segment_exporter import KeySegmentExporter
+from key_segment_indices_writer import KeySegmentIndicesWriter
 from measure_onset_finder import MeasureOnsetFinder
 from mixture_key_segment_annotator import MixtureKeySegmentAnnotator
 from neapolitan_chords_key_segment_annotator import NeapolitanChordsKeySegmentAnnotator
@@ -95,9 +94,9 @@ class GroundTruthKeySegmentAnnotatorAndExporter:
 
         Parameters
         ----------
-        mxl_filepath : str 
+        mxl_filepath : str
         parsed_mxl : music21.stream.Score
-        rntxt_analysis : music21.stream.iterator.RecursiveIterator 
+        rntxt_analysis : music21.stream.iterator.RecursiveIterator
         """
         measure_onset_finder = MeasureOnsetFinder(parsed_mxl)
 

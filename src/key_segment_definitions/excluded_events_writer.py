@@ -9,7 +9,9 @@ of key).
 import numpy as np
 
 from file_handlers import NpzFileHandler
-from utils import convert_camel_case_to_snake_case, strip_songname_from_path
+from utils import convert_camel_case_to_snake_case, \
+                  key_segment_annotator_class_to_def, \
+                  strip_songname_from_path
 
 NO_EXCLUDED_EVENT = 0
 
@@ -54,17 +56,21 @@ class ExcludedEventsWriter:
         key_segment_annotator_class : str
         allow_root_position_viio_chords : bool
         """
-        output_npz_filename = "out/micchi2021_"
+        output_npz_filename = "out/meta-corpus_validation_"
 
         if self.micchi_predictions:
-            output_npz_filename += "predicted_"
-            
-        output_npz_filename += key_segment_annotator_class
+            output_npz_filename += "pred_"
+        else:
+            output_npz_filename += "ground_truth_"
+
+        output_npz_filename += "excluded_events_"
+
+        output_npz_filename += key_segment_annotator_class_to_def[key_segment_annotator_class]
 
         if allow_root_position_viio_chords:
-            output_npz_filename += "_allow_root_pos_viio"
+            output_npz_filename += "v2"
 
-        output_npz_filename += "_validation_excluded_events.npz"
+        output_npz_filename += ".npz"
 
         return output_npz_filename
 
@@ -80,7 +86,7 @@ class ExcludedEventsWriter:
         mxl_filepath : str
         """
         songname = strip_songname_from_path(mxl_filepath)
-        
+
         song_excluded_events = np.ones_like(self.ground_truth_key_labels_dict[songname])
 
         for key_segment in key_segments:

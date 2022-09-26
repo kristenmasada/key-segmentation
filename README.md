@@ -62,5 +62,30 @@ cd src/accuracy_computer
 ```
 
 #### Extract Key Segments:
+
+##### Extract Ground Truth Clear Key Segments from Meta-Corpus:
 ```
+cd src/key_segment_definitions
+
+# First uncomment the line for the clear key segment
+# definition to use.
+./ground_truth_key_segment_annotator_and_exporter.sh
+```
+
+##### Extract Clear Key Segments from Meta-Corpus Based on Frog Model Key and Chord Predictions:
+```
+cd src/key_segment_definitions
+
+# First uncomment the line for the clear key segment
+# definition to use.
+./micchi_predictions_key_segment_annotator_and_exporter.sh
+```
+
+##### Extract Thresholded Key Segments from Meta-Corpus:
+```
+cd src/key_segment_definitions
+
+# First uncomment the line for the clear key segment
+# definition to use.
+./thresholded_micchi_model_key_segment_annotator_and_exporter.sh
 ```

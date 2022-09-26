@@ -1,0 +1,44 @@
+
+Time Signature : 3/8
+
+m1 b: i
+m2 iv b2 i
+m3 V b2 V7
+m4 i
+m6 iv b2 i
+m7 V b2 i64 b3 V7
+m8 i
+m9 III6 b3 III
+m10 D: IV
+m11 ii7 b2 V7
+m12 I
+m13 b: i64 b3 V7
+m14 i
+m15 i64 b2 V7
+m16 i
+m18 iv b2 i
+m19 V b2 i64 b3 V7
+m20 i
+m21 III6 b3 V
+m22 D: IV
+m23 ii7 b2 V7
+m24 I
+m25 b: i64 b3 V7
+m26 i
+m27 i64 b2 V7
+m28 i
+m29 V7/IV
+m30 iv64
+m31 viio7 b3 V7
+m32 V7/IV b3 #IVIt65
+m33 C: V7 b3 b: #IVIt65
+m34 C: I b2 b: bII b3 bII6
+m35 i64 b3 V7
+m36 i b3 #IVIt65
+m37 C: I64 b3 b: VI
+m38 bII b3 bII6
+m39 i64 b3 V7
+m40 i
+m41 iv b2 i
+m42 V b2 V7
+m43 i

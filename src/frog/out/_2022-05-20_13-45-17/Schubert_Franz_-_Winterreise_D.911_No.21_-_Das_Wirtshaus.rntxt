@@ -1,0 +1,34 @@
+
+Time Signature : 4/4
+
+m1 F: I
+m2 V b2 I64 b4 V
+m3 I b3 V7/IV b4 I b4.5 V7/IV
+m4 IV b3 I64 b3.5 I b4 viio7/VI b4.5 viio7
+m5 vi b2 V/VI b2.5 V b3 V7
+m6 I b4 V
+m7 ii6 b1.5 ii b2 V7/II b2.5 g: V b3 F: ii b3.5 g: i b4.5 F: ii
+m8 IV b2.5 iv b3 I64 b3.5 V
+m9 V42/IV b1.5 IV64 b2 I64 b2.5 V7 b3 I
+m10 b3 V7/IV b4 I b4.5 V7/IV
+m11 IV b2 IV64 b2.5 IV b3 I64 b4 V
+m12 I b4 V
+m13 ii6 b1.5 ii b2 g: V b3 i b4.5 F: ii
+m14 IV b3 I64 b3.5 V
+m15 V42/IV b1.5 IV6 b2 I64 b2.5 V7 b3 I
+m16 b3 V7/IV
+m17 IV b3 I64 b4 V b4.5 I
+m18 V7/IV b3 IV64
+m19 I b3 V b4.5 V7/IV
+m20 b3 I b3.5 IV b4 IV64 b4.5 IV
+m21 I b3 V
+m22 V65/V b1.5 f: V65/V b2 F: V65/V b2.5 f: viio7/V b3 i64 b4 V
+m23 i b4 V b4.5 i
+m24 G#: V7 b2 V b3 I b4.5 c: VI
+m25 i b2 VI b2.5 iv b3 i64 b4 V b4.5 I6
+m26 f: I b1.5 F: IV64 b2 I64 b2.5 c: V7/IV b3 F: I b3.5 c: iv b4 i6 b4.5 V43
+m27 i b2 VI b2.5 iv b3 i64 b4 V b4.5 I6
+m28 F: I b1.5 I6 b2 ii b2.5 V7 b3 I
+m29 b3 A#: V7 b3.5 F: V7/IV
+m30 IV b2 IV64 b2.5 ii6 b3 I64 b4 V7
+m31 I
