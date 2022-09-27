@@ -17,19 +17,19 @@ conda activate key-segmentation
 #### Recreate Thesis Results:
 ##### Recreate Table 6.1 (Clear Key Segment) Results:
 ```
-cd src/accuracy_computer
+cd src/results_computation
 ./clear_key_segment_results_computer.sh
 ```
 
 ##### Recreate Table 6.2 (Thresholded Frog Model) Results:
 ```
-cd src/accuracy_computer
+cd src/results_computation
 ./thresholded_key_segment_results_computer.sh
 ```
 
 ##### Recreate Tables 6.3 and 6.4 (Fragmentation) Results:
 ```
-cd src/accuracy_computer
+cd src/results_computation
 
 # Table 6.3:
 ./clear_key_segment_fragmentation_computer.sh
@@ -40,7 +40,7 @@ cd src/accuracy_computer
 
 ##### Recreate Tables 6.5-6.8 (Whole Key Segment) Results:
 ```
-cd src/accuracy_computer
+cd src/results_computation
 
 # Table 6.5:
 ./whole_clear_key_segment_results_computer.sh
@@ -57,7 +57,7 @@ cd src/accuracy_computer
 
 ##### Recreate Clear Thresholded Key Segment Precision and Recall Plots in Figures 6.1-6.6:
 ```
-cd src/accuracy_computer
+cd src/results_computation
 ./whole_key_segment_stats_plotter.sh
 ```
 
@@ -94,7 +94,7 @@ cd src/key_segment_definitions
 How to generate the input files used for the commandline arguments inside any of the above shell scripts:
 * `--ground_truth_event_key_labels_npz_path`: This file contains the ground truth key label for each event inside each song to be evaluated on.
     ```
-    cd src/accuracy_computer
+    cd src/results_computation
     ./micchi2021_csv_chords_2_event_key_labels_converter.sh
     ```
 * `--pred_key_segment_boundaries_npz_path`: This contains the start and stop time in eighth note beat indices for each clear key segment for each song predicted by the Micchi model. Generated using the instructions for 'Extract Clear Key Segments from Meta-Corpus Based on Frog Model Key and Chord Predictions' above.
