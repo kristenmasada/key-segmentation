@@ -56,7 +56,7 @@ pitch_bass_key_indices = {'C': 0,
                           'a#': 22,
                           'b-': 22,
                           'b': 23,
-                          'c-': 23 
+                          'c-': 23
                          }
 
 TONICIZATION_PRESENT = 1
@@ -71,7 +71,7 @@ class Micchi2021CSVChords2EventKeyLabelsConverter:
 
     def __init__(self, txt_file_with_csv_filepaths, input_type):
         """
-        
+
         Parameters
         ----------
         txt_file_with_csv_filepaths : str
@@ -99,7 +99,7 @@ class Micchi2021CSVChords2EventKeyLabelsConverter:
             print("Song:", songname)
 
             song_event_key_labels = self.extract_keys_from_event_chord_labels(song_event_chord_labels)
-            songs_to_event_key_labels[songname] = song_event_key_labels 
+            songs_to_event_key_labels[songname] = song_event_key_labels
 
             song_event_tonicization_labels = self.extract_tonicizations_from_event_chord_labels(song_event_chord_labels)
             songs_to_event_tonicization_labels[songname] = song_event_tonicization_labels
@@ -200,7 +200,7 @@ class Micchi2021CSVChords2EventKeyLabelsConverter:
 
         Parameters
         ----------
-        event_chord_labels : list of Chord 
+        event_chord_labels : list of Chord
         """
         event_keys = []
         for event_chord_label in event_chord_labels:
@@ -218,7 +218,7 @@ class Micchi2021CSVChords2EventKeyLabelsConverter:
         key_label : str
         """
         if self.input_type == 'pitch_bass':
-            return pitch_bass_key_indices[key_label] 
+            return pitch_bass_key_indices[key_label]
         else:
             raise Exception("Only `input_type` implemented so far is 'pitch_bass'.")
 
@@ -226,11 +226,11 @@ class Micchi2021CSVChords2EventKeyLabelsConverter:
         """ Create a numpy vector with length equal to the no. of events
         in the song. Each element has value 0 or 1, 0 indicating that
         a tonicization does not occur at that event and 1 indicating
-        that there is a tonicization occurring at that event. 
+        that there is a tonicization occurring at that event.
 
         Parameters
         ----------
-        event_chord_labels : list of Chord 
+        event_chord_labels : list of Chord
         """
         event_tonicizations = []
         for event_chord_label in event_chord_labels:
@@ -268,6 +268,6 @@ if __name__ == '__main__':
 
     npz_file_handler = NpzFileHandler()
     npz_file_handler.write_content_to_npz_file(songs_to_event_key_labels,
-                                               'out/micchi2021_validation_event_key_gt_labels.npz')
-    npz_file_handler.write_content_to_npz_file(songs_to_event_tonicization_labels,
-                                               'out/micchi2021_validation_event_tonicization_gt_labels.npz')
+                                               'out/meta-corpus_validation_ground_truth_event_key_labels.npz')
+    #npz_file_handler.write_content_to_npz_file(songs_to_event_tonicization_labels,
+    #                                           'out/meta-corpus_validation_ground_truth_event_tonicization_labels.npz')

@@ -1,0 +1,1 @@
+nice python3 -m scripts.cra_run '../../data/meta-corpus_split/valid/scores/*.mxl' -g '../../data/meta-corpus_split/valid/txt' -p 'logs/default_micchi_model' -o 'out/' --get_key_predictions

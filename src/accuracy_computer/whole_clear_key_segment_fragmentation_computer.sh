@@ -1,10 +1,10 @@
 # Definition 2: Tonic and Dominant Chords, Complete Triad
 echo 'Definition 2: Tonic and Dominant Chords, Complete Triad'
 python3 clear_key_segment_results_computer.py --event_key_preds_npz_path 'in/meta-corpus_validation_frog_event_key_preds_2022-05-12_17-00-11.npz' \
-                                               --pred_key_segment_boundaries_npz_path 'in/key_segment_boundaries/meta-corpus_validation_pred_key_segment_boundaries_def2.npz' \
-                                               --ground_truth_event_key_labels_npz_path 'in/meta-corpus_validation_ground_truth_event_key_labels.npz' \
-                                               --ground_truth_key_segment_boundaries_npz_path 'in/key_segment_boundaries/meta-corpus_validation_ground_truth_key_segment_boundaries_def2.npz' \
-                                               --table '6.7'
+                                              --pred_key_segment_boundaries_npz_path 'in/key_segment_boundaries/meta-corpus_validation_pred_key_segment_boundaries_def2.npz' \
+                                              --ground_truth_event_key_labels_npz_path 'in/meta-corpus_validation_ground_truth_event_key_labels.npz' \
+                                              --ground_truth_key_segment_boundaries_npz_path 'in/key_segment_boundaries/meta-corpus_validation_ground_truth_key_segment_boundaries_def2.npz' \
+                                              --table '6.7'
 
 # Definition 1: Tonic and Dominant Chords
 echo -e '\n\nDefinition 1: Tonic and Dominant Chords'

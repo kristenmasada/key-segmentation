@@ -89,3 +89,40 @@ cd src/key_segment_definitions
 # definition to use.
 ./thresholded_micchi_model_key_segment_annotator_and_exporter.sh
 ```
+
+#### Intermediate Files:
+How to generate the input files used for the commandline arguments inside any of the above shell scripts:
+* `--ground_truth_event_key_labels_npz_path`: This file contains the ground truth key label for each event inside each song to be evaluated on.
+    ```
+    cd src/accuracy_computer
+    ./micchi2021_csv_chords_2_event_key_labels_converter.sh
+    ```
+* `--pred_key_segment_boundaries_npz_path`: This contains the start and stop time in eighth note beat indices for each clear key segment for each song predicted by the Micchi model. Generated using the instructions for 'Extract Clear Key Segments from Meta-Corpus Based on Frog Model Key and Chord Predictions' above.
+* `--ground_truth_key_segment_boundaries_npz_path`: This contains the start and stop time in eighth note beat indices for each clear key segment for each song identified using the ground truth chord and key labels. Generated using the instructions for 'Extract Ground Truth Clear Key Segments from Meta-Corpus' above.
+* `--event_key_preds_npz_path`: This file contains the predicted key label for each event inside each song to be evaluated on.
+    ```
+    cd src/frog
+    ./get_key_predictions.sh
+    # Output .npz file will appear inside `out/` in a folder named with the
+    # date/time that the script was ran.
+    ```
+* `--event_key_probs_npz_path`: This file contains the predicted key probabilities over the 24 keys for each event inside each song to be evaluated on.
+    ```
+    cd src/frog
+    ./get_key_probabilities.sh
+    # Output .npz file will appear inside `out/` in a folder named with the
+    # date/time that the script was ran.
+    ```
+* `--predicted_rntxt_filepaths_dir`: This is the name of the folder inside `src/frog/out` that contains the predicted chord and key labels for each song. Inside the folder, there is a .rntxt file for each song. Instructions to generate the .rntxt prediction files are provided below:
+    ```
+    cd src/frog
+    ./get_roman_numeral_analysis.sh
+    # Output .rntxt files will appear inside `out/` in a folder named with the
+    # date/time that the script was ran.
+    ```
+
+#### Retrain Frog Model:
+```
+cd src/frog
+./cra_train.sh
+```

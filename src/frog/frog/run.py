@@ -152,7 +152,7 @@ def get_and_write_key_output_for_all_songs(files, model, model_info, output_fold
                                                     model_info["output mode"],
                                                     sample_from_probs=get_key_predictions)
         songs_to_key_output_dict[fname] = song_key_output
-        
+
     output_filename = 'micchi2021_original_model_validation'
     output_filename += '_key_preds.npz' if get_key_predictions else '_key_probs.npz'
     output_filename = os.path.join(output_folder, output_filename)
