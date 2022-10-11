@@ -8,6 +8,7 @@
 #                                                           --key_segments_output_method "output_key_segment_indices"
 
 # Definition 1: Tonic and Dominant Chords
+# NOTE: this takes a while to run.
 python3 ground_truth_key_segment_annotator_and_exporter.py --key_segment_annotator_class 'BasicKeySegmentAnnotator' \
                                                            --txt_file_with_mxl_filepaths 'in/meta-corpus_valid_mxl_filepaths.txt' \
                                                            --ground_truth_key_labels_npz_path '../results_computation/in/meta-corpus_validation_ground_truth_event_key_labels.npz' \
