@@ -57,6 +57,8 @@ cd src/results_computation
 
 ##### Recreate Clear Thresholded Key Segment Precision and Recall Plots in Figures 6.1-6.6:
 ```
+# First uncomment the line for the clear key segment
+# definition to use.
 cd src/results_computation
 ./whole_key_segment_stats_plotter.sh
 ```
