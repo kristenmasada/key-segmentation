@@ -133,3 +133,4 @@ tmp/
 original_sh_files/
 in/
 out/
+.DS_Store
