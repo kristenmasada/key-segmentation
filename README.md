@@ -8,11 +8,12 @@ This project is licensed under the terms of the GNU GPLv3 license.
 Music theoretic constructs such as tonality, harmony, and voice leading are often expressed ambiguously in music, yet the vast majority of datasets and music information retrieval systems attempt to create analyses that completely cover all musical input. Furthermore, most datasets encode a single analysis, even though the perception of the corresponding musical constructs may differ significantly among listeners, depending on individual differences such as musical sophistication and listening histories. In this thesis, an approach to key segmentation is introduced that handles music’s inherent ambiguity and listener subjectivity in a feasible way through rule-based partial analyses and multiple annotations, each mapping to a different, prototypical reference listener. These partial analyses are implemented using the chord and key label outputs of an existing state-of-the- art key segmentation model. Experimental evaluations show that partial analyses that are associated with unambiguous, clear key definitions lead to higher accuracy. Additionally, evaluating on partial analyses that this model predicts with high confidence leads to higher precision without a decrease in recall. The proposed approach to musical ambiguity and listener subjectivity is expected to be applicable to other music analysis tasks, with potential improvements in the performance of music information retrieval pipelines.
 
 ### Instructions to Run Code:
-#### Install Conda Environment:
+#### Install Key Segmentation Conda Environment:
 ```
 conda env create -f environment.yml
 conda activate key-segmentation
 ```
+
 
 #### Recreate Thesis Results:
 ##### Recreate Table 6.1 (Clear Key Segment) Results:
@@ -92,6 +93,13 @@ cd src/key_segment_definitions
 ./thresholded_micchi_model_key_segment_annotator_and_exporter.sh
 ```
 
+#### Install Frog Conda Environment:
+Note that the only difference between this environment and the `key-segmentation` environment above is that the version of music21 required to run the Frog model is 6.5.0 (rather than 6.7.0 above). This environment should only be used when running code inside of the `src/frog` directory. At all other times, the `key-segmentation` environment should be used.
+```
+cd src/frog
+conda env create -f environment.yml
+```
+
 #### Intermediate Files:
 How to generate the input files used for the commandline arguments inside any of the above shell scripts:
 * `--ground_truth_event_key_labels_npz_path`: This file contains the ground truth key label for each event inside each song to be evaluated on.
@@ -104,6 +112,7 @@ How to generate the input files used for the commandline arguments inside any of
 * `--event_key_preds_npz_path`: This file contains the predicted key label for each event inside each song to be evaluated on.
     ```
     cd src/frog
+    conda activate frog
     ./get_key_predictions.sh
     # Output .npz file will appear inside `out/` in a folder named with the
     # date/time that the script was ran.
@@ -111,6 +120,7 @@ How to generate the input files used for the commandline arguments inside any of
 * `--event_key_probs_npz_path`: This file contains the predicted key probabilities over the 24 keys for each event inside each song to be evaluated on.
     ```
     cd src/frog
+    conda activate frog
     ./get_key_probabilities.sh
     # Output .npz file will appear inside `out/` in a folder named with the
     # date/time that the script was ran.
@@ -118,6 +128,7 @@ How to generate the input files used for the commandline arguments inside any of
 * `--predicted_rntxt_filepaths_dir`: This is the name of the folder inside `src/frog/out` that contains the predicted chord and key labels for each song. Inside the folder, there is a .rntxt file for each song. Instructions to generate the .rntxt prediction files are provided below:
     ```
     cd src/frog
+    conda activate frog
     ./get_roman_numeral_analysis.sh
     # Output .rntxt files will appear inside `out/` in a folder named with the
     # date/time that the script was ran.
@@ -126,5 +137,6 @@ How to generate the input files used for the commandline arguments inside any of
 #### Retrain Frog Model:
 ```
 cd src/frog
+conda activate frog
 ./cra_train.sh
 ```
